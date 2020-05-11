@@ -55,7 +55,7 @@ class Entrada extends Model
     {
         //return $this->belongsToMany('App\Etiqueta'); <-- esto valdría igual siguiendo los entándares de Laravel
         //Se pueden especificar (modelo, tabla pivote, id modelo actual, id del otro modelo)
-        return $this->belongsToMany('App\Etiqueta', 'entradas_etiquetas', 'entrada_id', 'etiqueta_id');
+        return $this->belongsToMany('App\Etiqueta', 'entradas_etiquetas', 'entrada_id', 'etiqueta_id')->withTimestamps();
     }
 
 }

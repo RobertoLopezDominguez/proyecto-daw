@@ -19,7 +19,7 @@ class UsuarioController extends Controller
         //Recoger los datos en un JSON
         $json = $request->input('json', null); //En caso de no llegar el valor sería nulo
 
-        //Decodificar el JSON para convertirlo en un objeto
+        //Decodificar el JSON para convertirlo en un array
         $parametros_array = json_decode($json, true);
 
         //Validar los datos que recibimos
@@ -61,9 +61,9 @@ class UsuarioController extends Controller
             $usuario->estado = $parametros_array['estado'];
 
             //Asignamos el resto de valores según hayan llegado o no
-            if(isset($parametros_array['nombre'])) $usuario->estado = $parametros_array['nombre'];
-            if(isset($parametros_array['apellidos'])) $usuario->estado = $parametros_array['apellidos'];
-            if(isset($parametros_array['imagen'])) $usuario->estado = $parametros_array['imagen'];
+            if(isset($parametros_array['nombre'])) $usuario->nombre = $parametros_array['nombre'];
+            if(isset($parametros_array['apellidos'])) $usuario->apellidos = $parametros_array['apellidos'];
+            if(isset($parametros_array['imagen'])) $usuario->imagen = $parametros_array['imagen'];
 
             //Guardamos el usuario en la base de datos
             $guardar_usuario = $usuario->save();
@@ -101,7 +101,7 @@ class UsuarioController extends Controller
      * Método HTTP: GET
      * Ruta: /api/usuario
      */
-    public function mostar(Request $request){
+    public function mostrar(Request $request){
 
         //Recoger los datos en un JSON
         $json = $request->input('json', null); //En caso de no llegar el valor sería nulo
