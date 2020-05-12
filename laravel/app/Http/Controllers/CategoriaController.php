@@ -8,6 +8,15 @@ use App\Categoria;
 
 class CategoriaController extends Controller
 {
+
+    public function __construct() {
+
+        //Añado el middleware de autenticación a todos los métodos salvo las excepciones
+        $this->middleware('api.auth', [
+            'except' => ['mostrar', 'listarTodas']
+        ]);
+    } 
+
     /**
      * Función que crea una categoría nueva
      *
@@ -114,7 +123,7 @@ class CategoriaController extends Controller
      * No recibe ningún parámetro
      * 
      * Método HTTP: GET
-     * Ruta: /api/categoria
+     * Ruta: /api/categorias
      */
     public function listarTodas(){
 

@@ -8,6 +8,15 @@ use App\Etiqueta;
 
 class EtiquetaController extends Controller
 {
+    
+    public function __construct() {
+
+        //Añado el middleware de autenticación a todos los métodos salvo las excepciones
+        $this->middleware('api.auth', [
+            'except' => ['getEntradas', 'mostrar', 'listarTodas']
+        ]);
+    } 
+
     /**
      * Función que crea una etiqueta nueva
      *

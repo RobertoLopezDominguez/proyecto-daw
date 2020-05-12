@@ -30,7 +30,12 @@ Route::get('/', function () {
 Route::get('/api/usuario', 'UsuarioController@mostrar')->name('usuario.mostrar'); //Devolver un usuario por id, usuario o email
 Route::post('/api/usuario', 'UsuarioController@crear')->name('usuario.crear'); //Crea un usuario nuevo
 Route::put('/api/usuario', 'UsuarioController@actualizar')->name('usuario.actualizar'); //Actualiza un usuario 
+Route::delete('/api/usuario/imagen', 'UsuarioController@borrarImagen')->name('usuario.borrarImagen'); //Borra una imagen de usuario
 Route::delete('/api/usuario/{id}', 'UsuarioController@borrar')->name('usuario.borrar'); //Borra un usuario
+Route::post('/api/login', 'UsuarioController@login')->name('usuario.login'); //Loguea a un usuario
+Route::post('/api/usuario/imagen', 'UsuarioController@cargarImagen')->name('usuario.cargarImagen'); //Carga una imagen de usuario
+
+Route::get('/api/usuario/imagen', 'UsuarioController@getImagen')->name('usuario.getImagen'); //Devuelve la imagen de usuario
 
 //Rutas Perfiles
 Route::get('/api/perfil/{id}', 'PerfilController@mostrar')->name('perfil.mostrar'); //Devolver un perfil por id

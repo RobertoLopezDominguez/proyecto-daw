@@ -8,6 +8,15 @@ use App\Usuario;
 
 class UsuarioController extends Controller
 {
+    
+    public function __construct() {
+
+        //Añado el middleware de autenticación a todos los métodos salvo las excepciones
+        $this->middleware('api.auth', [
+            'except' => ['mostrar', 'login']
+        ]);
+    } 
+
     /**
      * Función que crea un usuario nuevo
      *
@@ -285,4 +294,189 @@ class UsuarioController extends Controller
         return response()->json($respuesta, $respuesta['codigo']);
     }
 
+    /**
+     * Función para hacer login de usuario
+     * 
+     * Recibe un JSON con el usuario y la password y opcionalmente gettoken
+     * 
+     * Método HTTP: POST
+     * Ruta: /api/login
+     */
+    public function login(Request $request){
+
+        //Creo un nuevo objeto de la clase JwtAuth para la autenticación
+        $jwtAuth = new \JwtAuth();
+
+        //Recojo los datos de recibidos por POST
+        $json = $request->input('json', null);
+        $parametros_objeto = json_decode($json);
+        $parametros_array = json_decode($json, true);
+
+        //Valido los datos
+        $validar = \Validator::make($parametros_array, [
+            'usuario'       => 'required',
+            'password'         => 'required'
+        ]); 
+
+        //Si la validación falla
+        if($validar->fails()){
+            $respuesta = array(
+                'estado' => 'error',
+                'codigo' => 400,
+                'mensaje' => 'El usuario no se ha podido autenticar.',
+                'errores' => $validate->errors()
+            );
+        }else{ //Si la validación es correcta
+
+            //Cifro la contraseña
+            $pwd_cifrada = hash('sha256', $parametros_array['password']);
+
+            //Devuelvo los datos del usuario o el token, según el caso
+            if(!empty($parametros_array['gettoken'])){
+                $respuesta = $jwtAuth->signup($parametros_array['usuario'], $pwd_cifrada, true);
+            }else{
+                $respuesta = $jwtAuth->signup($parametros_array['usuario'], $pwd_cifrada);
+            }
+    
+        }
+
+        //Devolvemos el resultado del login
+        return response()->json($respuesta);
+    }
+
+
+    /**
+     * Método para subir una imagen de usuario
+     * 
+     * Recibe una imagen llamada 'file0'
+     */
+    public function cargarImagen(Request $request){
+
+        //Cargo el token del usuario autenticado
+        $token = $request->header('Authorization');
+        //Recupero la ID del usuario autenticado
+        $usuario = $this->getUsuarioByToken($token);
+
+        //Recojo la imagen de la petición
+        $imagen = $request->file('file0'); 
+
+        //Valido que el archivo sea una imagen
+        $validar = \Validator::make($request->all(), [
+            'file0' => 'required|image|mimes:jpg,jpeg,png,gif'
+        ]);
+
+        //Compruebo que la imagen ha llegado y es válida
+        if($imagen && !$validar->fails()){
+
+            //Creo un nombre para la imagen añadiendo la hora actual al nombre original
+            $nombre_imagen = time()."_".$imagen->getClientOriginalName();
+
+            //Guardo el fihero en el disco 'usuarios'
+            \Storage::disk('usuarios')->put($nombre_imagen, \File::get($imagen));
+            //Actualizo el nombre de la imagen en el modelo del usuario
+            Usuario::where('id', $usuario->id)->update(['imagen' => $nombre_imagen]);
+
+            $respuesta = array(
+                'codigo' => 200,
+                'estado' => 'éxito',
+                'imagen' => $nombre_imagen
+            );
+
+
+        }else{ //Si no llega devuelco un error
+            $respuesta = array(
+                'estado' => 'error',
+                'codigo' => 400,
+                'mensaje' => 'No es una imagen válida.'
+            );
+        }
+
+        //Devuelvo la respuesta con el código de la misma
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
+    /**
+     * Método que devuelve la imagen del usuario
+     */
+    public function getImagen(Request $request) {
+
+        //Cargo el token del usuario autenticado
+        $token = $request->header('Authorization');
+        //Recupero la ID del usuario autenticado
+        $usuario = $this->getUsuarioByToken($token);
+
+        //Compruebo que el archivo existe
+        $isset = \Storage::disk('usuarios')->exists($usuario->imagen);
+
+        //Si existe
+        if ($isset) {
+            //Recupero la imagen
+            $file = \Storage::disk('usuarios')->get($usuario->imagen);
+
+            //Devuelvo la imagen
+            return new Response($file, 200);
+        } else { //Si no existe devuelvo un error
+            $respuesta = array(
+                'codigo' => 400,
+                'estado' => 'error',
+                'mensaje' => 'La imagen no existe.'
+            );
+        }
+
+        //Devuelvo la respuesta si ha habido error
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
+    /**
+     * Método que elimina la imagen del usuario
+     */
+    public function borrarImagen(Request $request) {
+
+        //Cargo el token del usuario autenticado
+        $token = $request->header('Authorization');
+        //Recupero la ID del usuario autenticado
+        $usuario = $this->getUsuarioByToken($token);
+
+        //Compruebo que el archivo existe
+        $isset = \Storage::disk('usuarios')->exists($usuario->imagen);
+
+        //Si existe
+        if ($isset) {
+            //Borro la imagen
+            $file = \Storage::disk('usuarios')->delete($usuario->imagen);
+            //Elimino la referencia a la imagen en el modelos
+             Usuario::where('id', $usuario->id)->update(['imagen' => null]);
+
+            //Devuelvo un mensaje de éxito
+            $respuesta = array(
+                'codigo' => 200,
+                'estado' => 'éxito',
+                'mensaje' => 'La imagen se ha borrado correctamente.'
+            );
+        } else { //Si no existe devuelvo un error
+            $respuesta = array(
+                'codigo' => 400,
+                'status' => 'error',
+                'message' => 'La imagen no existe.'
+            );
+        }
+
+        //Devuelvo la respuesta si ha habido error
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
+    /**
+     * Función que devuelve la ID del usuario actualmente autenticado
+     */
+    private function getUsuarioByToken($token){
+
+              //Creo un nuevo objeto de la clase JwtAuth
+              $jwtAuth = new \JwtAuth();
+
+              //Recupero el usuario del token recibido
+              $usuario = $jwtAuth->checkToken($token, true);
+
+              //Devuelvo el usuario
+              return $usuario;
+    }
 }

@@ -8,6 +8,15 @@ use App\Medio;
 
 class MedioController extends Controller
 {
+    
+    public function __construct() {
+
+        //Añado el middleware de autenticación a todos los métodos salvo las excepciones
+        $this->middleware('api.auth', [
+            'except' => ['mostrar', 'listarTodos']
+        ]);
+    } 
+
     /**
      * Función que crea un medio nuevo
      *
@@ -323,4 +332,100 @@ class MedioController extends Controller
         //Devuelvo la respuesta con el código de la misma
         return response()->json($respuesta, $respuesta['codigo']);
     }
+
+    /**
+     * Método para subir un medio
+     * 
+     * Recibe un archivo llamado 'file0'
+     */
+    public function cargarMedio(Request $request){
+
+        //Recojo el medio de la petición
+        $medio = $request->file('file0'); 
+
+        //Compruebo que el medioha llegado
+        if($medio){
+
+            //Creo un nombre para el medio añadiendo la hora actual al nombre original
+            $nombre_medio = time()."_".$medio->getClientOriginalName();
+
+            \Storage::disk('medios')->put($nombre_medio, \File::get($medio));
+
+            $respuesta = array(
+                'codigo' => 200,
+                'estado' => 'éxito',
+                'imaegn' => $nombre_medio
+            );
+        }else{ //Si no llega devuelvo un error
+            $respuesta = array(
+                'estado' => 'error',
+                'codigo' => 400,
+                'mensaje' => 'Error al subir el medio.'
+            );
+        }
+
+        //Devuelvo la respuesta con el código de la misma
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
+    /**
+     * Método que devuelve la imagen del usuario
+     */
+    public function getMedio($nombre_medio) {
+
+        //Compruebo que el archivo existe
+        $isset = \Storage::disk('medios')->exists($nombre_medio);
+
+        //Si existe
+        if ($isset) {
+            //Recupero el medio
+            $file = \Storage::disk('medios')->get($nombre_medios);
+
+            //Devuelvo el medio
+            return new Response($file, 200);
+        } else { //Si no existe devuelvo un error
+            $respuesta = array(
+                'codigo' => 400,
+                'estado' => 'error',
+                'mensaje' => 'El medio no existe.'
+            );
+        }
+
+        //Devuelvo la respuesta si ha habido error
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
+    /**
+     * Método que elimina un medio
+     * 
+     * Protocolo HTTP: DELETE
+     */
+    public function borrarMedio($nombre_medio) {
+
+        //Compruebo que el archivo existe
+        $isset = \Storage::disk('medios')->exists($nombre_medios);
+
+        //Si existe
+        if ($isset) {
+            //Borro el edio
+            $file = \Storage::disk('medios')->delete($nombre_medios);
+
+            //Devuelvo un mensaje de éxito
+            $respuesta = array(
+                'codigo' => 200,
+                'estado' => 'éxito',
+                'mensaje' => 'El mediose ha borrado correctamente.'
+            );
+        } else { //Si no existe devuelvo un error
+            $respuesta = array(
+                'codigo' => 400,
+                'status' => 'error',
+                'message' => 'El medio no existe.'
+            );
+        }
+
+        //Devuelvo la respuesta si ha habido error
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
 }
