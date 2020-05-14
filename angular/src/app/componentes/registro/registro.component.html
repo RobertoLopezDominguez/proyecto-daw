@@ -1,0 +1,60 @@
+<!-- Contenedor -->
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+<div  class="col-md-6">
+    <!-- Título de la página -->
+    <h1>{{ page_title }}</h1>
+
+    <p *ngIf="estado != 'éxito'">Completa los campos para realizar el registro</p>
+
+    <!-- Alerta que se mostrará si el registro se ha realizado correctamente -->
+    <div class="alert alert-success" *ngIf="estado == 'éxito'">
+        El registro se ha completado con éxito.
+    </div>
+    <!-- Alerta que se mostrará si el registro no se ha completado -->
+    <div class="alert alert-error" *ngIf="estado == 'error'">
+        El registro no se ha completado con éxito.
+    </div>
+
+    <!-- Formulario de registro -->
+    <!-- Cuando el formulario se envíe llamará al método onSubmit enciandole el formulario -->
+    <form action="" class="col-md-12 ml-0 p-0" #registroForm="ngForm" (ngSubmit)="onSubmit(registroForm)">
+        <div class="form-group"> 
+            <label for="usuario">Nombre de usuario</label>
+            <!-- [(ngModel)] a la vez modifica en la clase del componente y viceversa -->
+            <input type="text" name="usuario" class="form-control" #nombreUsuario="ngModel" [(ngModel)]="usuario.usuario" required pattern="[0-9a-zA-Z]+">
+            <!-- Mensaje de error en caso de que la validación no sea correcta -->
+            <small *ngIf="!nombreUsuario.valid && nombreUsuario.touched" class="invalid-feedback d-block">
+                El nombre de usuario no es válido
+            </small>
+        </div>
+        <div class="form-group"> 
+            <label for="password">Contraseña</label>
+            <input type="password" name="password" class="form-control" #password="ngModel" [(ngModel)]="usuario.password" required>
+        </div>
+        <div class="form-group"> 
+            <label for="nombre">Nombre</label>
+            <input type="text" name="nombre" class="form-control" required #nombre="ngModel" [(ngModel)]="usuario.nombre" pattern="[A-Za-zÁ-ÿ ]+">
+            <small *ngIf="!nombre.valid && nombre.touched" class="invalid-feedback d-block">
+                El nombre no es válido
+            </small>
+        </div>
+        <div class="form-group"> 
+            <label for="usuario">Apellidos</label>
+            <input type="text" name="apellidos" class="form-control" #apellidos="ngModel" [(ngModel)]="usuario.apellidos" required pattern="[A-Za-zÁ-ÿ ]+">
+            <small *ngIf="!apellidos.valid && apellidos.touched" class="invalid-feedback d-block">
+                Los apellidos no son válidos
+            </small>
+        </div>
+        <div class="form-group"> 
+            <label for="usuario">Email</label>
+            <input type="email" name="email" class="form-control" #email="ngModel" [(ngModel)]="usuario.email"required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+            <small *ngIf="!email.valid && email.touched" class="invalid-feedback d-block">
+                El email no es válido
+            </small>
+        </div>
+
+        <!-- Botón para enviar el formulario. Deshabilitado si el formulario no está validado -->
+        <input type="submit" value="Registrarme" class="btn btn-success" [disabled]="registroForm.invalid"/>
+    </form>
+</div> </div>
+<!-- FIN Contenedor -->

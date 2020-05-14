@@ -13,17 +13,17 @@ class UsuarioController extends Controller
 
         //Añado el middleware de autenticación a todos los métodos salvo las excepciones
         $this->middleware('api.auth', [
-            'except' => ['mostrar', 'login']
+            'except' => ['registro','mostrar', 'login']
         ]);
     } 
 
     /**
-     * Función que crea un usuario nuevo
+     * Función que registra un usuario nuevo
      *
      * Método HTTP: POST
      * Ruta: /api/usuario
      */
-    public function crear(Request $request){
+    public function registro(Request $request){
 
         //Recoger los datos en un JSON
         $json = $request->input('json', null); //En caso de no llegar el valor sería nulo
