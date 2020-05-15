@@ -14,6 +14,7 @@ const appRoutes: Routes = [
     {path: '', component: LoginComponent},
     {path: 'inicio', component: InicioComponent},
     {path: 'login', component: LoginComponent},
+    {path: 'logout/:cerrar', component: LoginComponent},
     {path: 'registro', component: RegistroComponent},
     {path: 'admin', component: AdminComponent},
     {path: '**', component: ErrorComponent}
