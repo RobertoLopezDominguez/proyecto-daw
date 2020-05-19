@@ -8,6 +8,7 @@ import { RegistroComponent } from './componentes/registro/registro.component';
 import { InicioComponent } from './componentes/inicio/inicio.component';
 import { AdminComponent } from './componentes/admin/admin.component';
 import { ErrorComponent } from './componentes/error/error.component';
+import { PerfilUsuarioComponent } from './componentes/perfil-usuario/perfil-usuario.component';
 
 //Definir las rutas
 const appRoutes: Routes = [
@@ -17,6 +18,7 @@ const appRoutes: Routes = [
     {path: 'logout/:cerrar', component: LoginComponent},
     {path: 'registro', component: RegistroComponent},
     {path: 'admin', component: AdminComponent},
+    {path: 'mi-perfil', component: PerfilUsuarioComponent},
     {path: '**', component: ErrorComponent}
 ]; // ** siempre al final
 

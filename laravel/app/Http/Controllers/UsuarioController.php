@@ -13,7 +13,7 @@ class UsuarioController extends Controller
 
         //Añado el middleware de autenticación a todos los métodos salvo las excepciones
         $this->middleware('api.auth', [
-            'except' => ['registro','mostrar', 'login']
+            'except' => ['registro','mostrar', 'login', 'getImagenByNombre']
         ]);
     } 
 
@@ -186,7 +186,7 @@ class UsuarioController extends Controller
                 'estado'        => 'alpha|max:50',
                 'nombre'        => 'alpha|max:50',
                 'apellidos'     => 'alpha|max:255',
-                'imagen'        => 'alpha_dash|max:255'
+                'imagen'        => 'max:255'
             ]); 
 
             //Compruebo si la validación ha fallado
@@ -222,6 +222,7 @@ class UsuarioController extends Controller
                         'estado' => 'éxito',
                         'codigo' => 200,
                         'mensaje' => 'Usuario actualizado correctamente.',
+                        'cambios'  => $parametros_array,
                         'resultado' => $actualizar_usuario
                     );
                 }else{ //Si no muestro un mensaje de error
@@ -426,6 +427,23 @@ class UsuarioController extends Controller
         //Devuelvo la respuesta si ha habido error
         return response()->json($respuesta, $respuesta['codigo']);
     }
+
+    public function getImagenByNombre($nombre) {
+        //Compruebo que la imagen existe
+        $isset = \Storage::disk('usuarios')->exists($nombre);
+        if ($isset) {
+            //Recupero y devuelvo la imagen
+            $imagen = \Storage::disk('usuarios')->get($nombre);
+            return new Response($imagen, 200);
+        } else { //Si no existe devuelvo un error
+            $respuesta = array(
+                'codigo' => 400,
+                'estado' => 'error',
+                'mensaje' => 'La imagen no existe.'
+            );
+        }
+        return response()->json($respuesta, $respuesta['codigo']);
+    } 
 
     /**
      * Método que elimina la imagen del usuario

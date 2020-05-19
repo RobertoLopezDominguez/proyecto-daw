@@ -42,8 +42,9 @@ class JwtAuth{
             //Datos para generar el token
             $token = array(
                 'id'            =>  $usuario->id,
-                'usuario'      =>  $usuario->usuario,
+                'usuario'       =>  $usuario->usuario,
                 'email'         =>  $usuario->email,
+                'perfil_id'     =>  $usuario->perfil_id,
                 'perfil'        =>  $usuario->perfil->nombre,
                 'nivel_acceso'  =>  $usuario->perfil->nivel_acceso,
                 'nombre'        =>  $usuario->nombre,

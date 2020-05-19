@@ -36,6 +36,7 @@ Route::post('/api/login', 'UsuarioController@login')->name('usuario.login'); //L
 Route::post('/api/usuario/imagen', 'UsuarioController@cargarImagen')->name('usuario.cargarImagen'); //Carga una imagen de usuario
 
 Route::get('/api/usuario/imagen', 'UsuarioController@getImagen')->name('usuario.getImagen'); //Devuelve la imagen de usuario
+Route::get('/api/usuario/imagen/{imagen}', 'UsuarioController@getImagenByNombre')->name('usuario.getImagenByNombre'); //Devuelve la imagen
 
 //Rutas Perfiles
 Route::get('/api/perfil/{id}', 'PerfilController@mostrar')->name('perfil.mostrar'); //Devolver un perfil por id

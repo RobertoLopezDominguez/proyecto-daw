@@ -62,8 +62,51 @@ export class UsuarioService{
         //Cabeceras HTTP
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        //Devuelvo la petición AJAX para autenticar un usuario
+        //Devuelvo la petición AJAX para autenticar un usuario por PSOT
         return this._http.post(this.url+'login', parametros, {headers: headers});
+    }
+
+    /**
+     * Método para actualizar los datos del usuario en la BBDD
+     * 
+     * Recibe el token del usuario logueado y los datos del usuario en un objeto
+     */
+    actualizar(token, usuario): Observable<any>{
+
+        //Creo una copia del objeto usuario para poder eliminar los campos
+        //que voy a enviar en la petición sin que afecte al objeto original
+        let usuario_actualizado = JSON.parse(JSON.stringify(usuario)); 
+
+        //Recupero el usuario autenticado
+        let identidad = this.getIdentidad();
+
+        //Compruebo si los campos únicos de 'usuario' y 'email' se han actualizado
+        if(identidad.usuario == usuario.usuario){
+            //Si el campo no se ha actualizado lo elimino para no enviarlo en la petición
+            //De esta forma se evita el error de que el campo ya existe
+            delete usuario_actualizado.usuario;
+        }
+        if(identidad.email == usuario.email){ //Misma operación para el email
+            delete usuario_actualizado.email;
+        }
+
+        //Elimino el parámetro de la password que no quiero actualizar
+        delete usuario_actualizado.password;
+
+        //Convierto los datos del usuario de un objeto a JSON
+        let json = JSON.stringify(usuario_actualizado);
+
+        console.log(json);
+        //Creo una cadena con los parámetros para la petición
+        let parametros = "json="+json;
+
+        //Cabeceras HTTP. Envío además el token.
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+                                        .set('Authorization', token);
+        
+                                        
+        //Devuelvo la petición AJAX para actualizar el usuario por PUT
+        return this._http.put(this.url+'usuario', parametros, {headers: headers});
     }
 
     /**

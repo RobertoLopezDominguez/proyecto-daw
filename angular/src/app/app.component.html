@@ -33,7 +33,10 @@
             >
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">Categorías</a>
+            <a class="nav-link" href="#">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Contacto</a>
           </li>
         </ul>
         <!-- Menú de la derecha -->
@@ -58,15 +61,36 @@
               aria-haspopup="true"
               aria-expanded="false"
             >
+            Administración
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" href="#">Entradas</a>
+              <a class="dropdown-item" href="#">Categorías</a>
+              <a class="dropdown-item" href="#">Medios</a>
+              <div class="dropdown-divider"></div>
+              <a class="dropdown-item" href="#">Administración de Usuarios</a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
             {{ identidad.nombre + " " + identidad.apellidos }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Crear entrada</a>
-              <a class="dropdown-item" href="#">Crear categoría</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item" href="#">Mi perfil</a>
-              <a class="dropdown-item" [routerLink]="['/ajustes']">Ajustes</a>
+              <a class="dropdown-item" [routerLink]="['/mi-perfil']">Mi perfil</a>
               <a class="dropdown-item" [routerLink]="['/logout/1']">Cerrar sesión</a>
+            </div>
+          </li>
+          <li *ngIf="identidad && identidad.imagen" class="nav-item">
+            <div class="avatar_mask">
+              <img src="{{url + 'usuario/imagen/' + identidad.imagen}}" alt="" class="avatar_navbar">
             </div>
           </li>
         </ul>
