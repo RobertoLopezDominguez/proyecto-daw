@@ -12,7 +12,7 @@ export class UsuarioService{
     public token;
 
     constructor(
-        public _http: HttpClient
+        private _http: HttpClient
     ){
         //URL para peticiones AJAX a Laravel
         this.url = global.url;

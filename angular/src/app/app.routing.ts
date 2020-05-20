@@ -9,6 +9,7 @@ import { InicioComponent } from './componentes/inicio/inicio.component';
 import { AdminComponent } from './componentes/admin/admin.component';
 import { ErrorComponent } from './componentes/error/error.component';
 import { PerfilUsuarioComponent } from './componentes/perfil-usuario/perfil-usuario.component';
+import { CategoriaNuevaComponent } from './componentes/categoria-nueva/categoria-nueva.component';
 
 //Definir las rutas
 const appRoutes: Routes = [
@@ -19,6 +20,7 @@ const appRoutes: Routes = [
     {path: 'registro', component: RegistroComponent},
     {path: 'admin', component: AdminComponent},
     {path: 'mi-perfil', component: PerfilUsuarioComponent},
+    {path: 'categoria-nueva', component: CategoriaNuevaComponent},
     {path: '**', component: ErrorComponent}
 ]; // ** siempre al final
 

@@ -29,11 +29,18 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
             <a class="nav-link" [routerLink]="['/inicio']" 
-              >Inicio<span class="sr-only">(current)</span></a
-            >
+              >Inicio<span class="sr-only">(current)</span></a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Blog</a>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Categorías
+            </a>
+            <!-- Submenú Categorías -->
+            <ul class="dropdown-menu" >
+              <li class="nav-item dropdown" *ngFor="let c of categorias">
+                <a class="dropdown-item" href="#">{{c.nombre}}</a>
+              </li>
+            </ul>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Contacto</a>
@@ -65,7 +72,7 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
               <a class="dropdown-item" href="#">Entradas</a>
-              <a class="dropdown-item" href="#">Categorías</a>
+              <a class="dropdown-item" [routerLink]="['/categoria-nueva']">Categorías</a>
               <a class="dropdown-item" href="#">Medios</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Administración de Usuarios</a>

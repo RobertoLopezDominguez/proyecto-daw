@@ -64,6 +64,7 @@ class CategoriaController extends Controller
                     'estado' => 'éxito',
                     'codigo' => 200,
                     'mensaje' => 'La categoría se ha creado correctamente.',
+                    'categoria' => $categoria,
                     'resultado' => $guardar_categoria
                 );
             }else{ //Si no envío un error
