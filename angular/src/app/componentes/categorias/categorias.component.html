@@ -1,0 +1,65 @@
+<!-- Contenedor -->
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+    <div  class="col-md-11">
+        <!-- Título de la página -->
+        <h1>{{ page_title }}</h1>
+        <hr />
+
+      <div class="col-md-6 float-left">
+        <p>Lista de categorías</p>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nobre</th>
+              <th scope="col">Handle</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let c of categorias">
+              <th scope="row">{{c.id}}</th>
+              <td>{{c.nombre}}</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="col-md-6 float-right">
+        <p>Crea una nueva categoría</p>
+        <hr/>
+        <!-- Formulario de ajustes de usuario -->
+        <!-- Cuando el formulario se envíe llamará al método onSubmit enciandole el formulario -->
+        <form #categoriaForm="ngForm" (ngSubmit)="onSubmit(categoriaForm)" class="col-md-12 p-0">
+            <div class="form-group">
+                <label for="nombre">Nombre de la categoría</label>
+                <input type="text" name="nombre" class="form-control" #nombre="ngModel" [(ngModel)]="categoria.nombre" required>
+                <small *ngIf="!nombre.valid && nombre.touched" class="invalid-feedback d-block">
+                    El nombre de la categoría no es válido
+                </small>
+            </div>
+            <input type="submit" value="Guardar" class="btn btn-success float-right" [disabled]="categoriaForm.invalid" />
+        </form>
+
+        <div class="alertas-categorias">
+          <!-- Alerta que se mostrará si se ha realizado correctamente -->
+          <div class="alert alert-success" *ngIf="estado == 'éxito'">
+            La categoría '{{categoriaCreada}}' se ha creado con éxito.
+          </div> 
+          <!-- Alerta que se mostrará si no se ha completado -->
+          <div class="alert alert-danger" *ngIf="estado == 'error'">
+              La categoria no se ha podido crear.
+          </div>
+        </div>
+
+
+
+      </div>
+
+    
+
+    </div> 
+</div>
+    <!-- FIN Contenedor -->
+
+

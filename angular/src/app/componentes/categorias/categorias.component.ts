@@ -4,20 +4,19 @@ import { UsuarioService } from '../../servicios/usuario.service';
 import { Categoria } from '../../modelos/categoria';
 import { CategoriaService } from '../../servicios/categoria.service';
 
-
 @Component({
-  selector: 'app-categoria-nueva',
-  templateUrl: './categoria-nueva.component.html',
-  styleUrls: ['./categoria-nueva.component.css'],
-  providers: [UsuarioService, CategoriaService]
+  selector: 'app-categorias',
+  templateUrl: './categorias.component.html',
+  styleUrls: ['./categorias.component.css']
 })
-export class CategoriaNuevaComponent implements OnInit {
+export class CategoriasComponent implements OnInit {
 
   public page_title: string;
   public identidad;
   public token;
   public categoria: Categoria;
   public categorias;
+  public categoriaCreada: string;
   public estado: string;
 
   constructor(
@@ -26,7 +25,7 @@ export class CategoriaNuevaComponent implements OnInit {
     private _usuarioServicio: UsuarioService,
     private _categoriaService: CategoriaService
   ) {
-    this.page_title = "Crear nueva categoría";
+    this.page_title = "Categorias";
 
     this.identidad = this._usuarioServicio.getIdentidad();
     this.token = this._usuarioServicio.getToken();
@@ -44,6 +43,8 @@ export class CategoriaNuevaComponent implements OnInit {
         if(respose.estado == 'éxito'){
           this.categoria = respose.categoria;
           this.estado = 'éxito';
+          this.categoriaCreada = this.categoria.nombre;
+          form.reset();
         }else{
           this.estado = 'error';
         }
@@ -61,6 +62,7 @@ export class CategoriaNuevaComponent implements OnInit {
         
         if(response.estado == 'éxito'){
           this.categorias = response.categorias;
+
         }
       },
       error => {
@@ -68,4 +70,5 @@ export class CategoriaNuevaComponent implements OnInit {
       }
     );
   }
+
 }

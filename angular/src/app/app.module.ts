@@ -18,7 +18,7 @@ import { InicioComponent } from './componentes/inicio/inicio.component';
 import { ErrorComponent } from './componentes/error/error.component';
 import { AdminComponent } from './componentes/admin/admin.component';
 import { PerfilUsuarioComponent } from './componentes/perfil-usuario/perfil-usuario.component';
-import { CategoriaNuevaComponent } from './componentes/categoria-nueva/categoria-nueva.component';
+import { CategoriasComponent } from './componentes/categorias/categorias.component';
 
 //Declaro los módulos que voy a utilizar
 @NgModule({
@@ -30,7 +30,7 @@ import { CategoriaNuevaComponent } from './componentes/categoria-nueva/categoria
     ErrorComponent,
     AdminComponent,
     PerfilUsuarioComponent,
-    CategoriaNuevaComponent
+    CategoriasComponent
   ],
   imports: [
     BrowserModule,
