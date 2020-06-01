@@ -1,0 +1,48 @@
+<!-- Contenedor -->
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+    <div  class="col-md-12">
+        <!-- Título de la página -->
+        <h1>{{ page_title }}</h1>
+    
+        <p>Lista de entradas del blog</p>
+        <hr/>
+    
+        <!-- Tabla con la lista de entradas -->
+        <table class="table table-striped tabla-entradas">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Título</th>
+                <th scope="col">Autor</th>
+                <th scope="col">Categoría</th>
+                <th scope="col">Etiquetas</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let entrada of entradas">
+                <th scope="row">{{entrada.id}}</th>
+                <td>{{entrada.titulo}}</td>
+                <td>{{entrada.nombre}} {{entrada.apellidos}}</td>
+                <td>{{entrada.categoria}}</td>
+                <td>
+                    <span *ngFor="let etiqueta of entrada.etiquetas">{{etiqueta}}, </span>
+                </td>
+                <td>{{entrada.estado}}</td>
+                <td>
+                    <span [routerLink]="['/editar-entrada/', entrada.id]">Editar</span>
+                    <span> | </span>
+                    <span *ngIf="entrada.estado == 'Publicada'">Dejar de publicar</span>
+                    <span *ngIf="entrada.estado == 'Borrador'">Enviar a Papelera</span>
+                    <span *ngIf="entrada.estado == 'Papelera'">Borrar definitivamente</span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+    </div> 
+</div>
+<!-- FIN Contenedor -->
+
+

@@ -53,7 +53,8 @@ Route::put('/api/categoria', 'CategoriaController@actualizar')->name('categoria.
 Route::delete('/api/categoria/{id}', 'CategoriaController@borrar')->name('categoria.borrar'); //Borra una categoria
 
 //Rutas Medios
-Route::get('/api/medio/{id}', 'MedioController@mostrar')->name('medio.mostrar'); //Devolver un medio por id
+Route::get('/api/medio/{nombre}', 'MedioController@getMedio')->name('medio.getMedio'); //Devolver un medio por nombre
+Route::get('/api/medio/id/{id}', 'MedioController@mostrar')->name('medio.mostrar'); //Devolver un medio por id
 Route::get('/api/medios', 'MedioController@listarTodos')->name('medio.listarTodos'); //Devolver todos los medios
 Route::post('/api/medio', 'MedioController@crear')->name('medio.crear'); //Crea un medio nuevo
 Route::put('/api/medio', 'MedioController@actualizar')->name('medio.actualizar'); //Actualiza un medio

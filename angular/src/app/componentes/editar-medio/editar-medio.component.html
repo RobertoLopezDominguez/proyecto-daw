@@ -1,0 +1,39 @@
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+    <h1>Editar Medio</h1>
+    <hr/>
+</div>
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+    <form class="col-md-12 ml-0 p-0" #imagen="ngForm" (ngSubmit)="onSubmit(imagen)">
+        <div class="form-group text-center">
+            <div>
+                <img src="{{url + 'medio/' + medio.nombre}}" alt="" class="imagen_medio">
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-group"> 
+                <label for="titulo">Título</label>
+                <!-- [(ngModel)] a la vez modifica en la clase del componente y viceversa -->
+                <input type="text" name="titulo" class="form-control" #tituloMedio="ngModel" [(ngModel)]="medio.titulo">
+            </div>
+            <div class="form-group"> 
+                <label for="texto_alt">Texto alternativo</label>
+                <!-- [(ngModel)] a la vez modifica en la clase del componente y viceversa -->
+                <input type="text" name="texto_alt" class="form-control" #ttextoAltMedio="ngModel" [(ngModel)]="medio.texto_alt">
+            </div>
+            <div class="form-group"> 
+                <label for="leyenda">Leyenda</label>
+                <!-- [(ngModel)] a la vez modifica en la clase del componente y viceversa -->
+                <input type="text" name="leyenda" class="form-control" #leyendaMedio="ngModel" [(ngModel)]="medio.leyenda">
+            </div>
+            <div class="form-group"> 
+                <label for="descripcion">Descripción</label>
+                <!-- [(ngModel)] a la vez modifica en la clase del componente y viceversa -->
+                <textarea name="leyenda" class="form-control" #leyendaMedio="ngModel" [(ngModel)]="medio.descripcion"></textarea>
+            </div>
+
+                    <!-- Botón para enviar el formulario. Deshabilitado si el formulario no está validado -->
+        <input type="submit" value="Guardar cambios" class="btn btn-success"/>
+        </div>
+
+    </form>
+</div>

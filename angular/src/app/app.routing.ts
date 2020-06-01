@@ -10,6 +10,11 @@ import { AdminComponent } from './componentes/admin/admin.component';
 import { ErrorComponent } from './componentes/error/error.component';
 import { PerfilUsuarioComponent } from './componentes/perfil-usuario/perfil-usuario.component';
 import { CategoriasComponent } from './componentes/categorias/categorias.component';
+import { NuevaEntradaComponent } from './componentes/nueva-entrada/nueva-entrada.component';
+import { EntradasComponent } from './componentes/entradas/entradas.component';
+import { EditarEntradaComponent } from './componentes/editar-entrada/editar-entrada.component';
+import { MediosComponent } from './componentes/medios/medios.component';
+import { EditarMedioComponent } from './componentes/editar-medio/editar-medio.component';
 
 //Definir las rutas
 const appRoutes: Routes = [
@@ -21,6 +26,11 @@ const appRoutes: Routes = [
     {path: 'admin', component: AdminComponent},
     {path: 'mi-perfil', component: PerfilUsuarioComponent},
     {path: 'categorias', component: CategoriasComponent},
+    {path: 'nueva-entrada', component: NuevaEntradaComponent},
+    {path: 'entradas', component: EntradasComponent},
+    {path: 'editar-entrada/:id', component: EditarEntradaComponent},
+    {path: 'editar-medio/:id', component: EditarMedioComponent},
+    {path: 'medios', component: MediosComponent},
     {path: '**', component: ErrorComponent}
 ]; // ** siempre al final
 

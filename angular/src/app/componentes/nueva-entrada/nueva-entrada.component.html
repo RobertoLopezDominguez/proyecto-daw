@@ -1,0 +1,96 @@
+<!-- Contenedor -->
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+    <div  class="col-md-12">
+        <!-- Título de la página -->
+        <h1>{{ page_title }}</h1>
+    
+        <p>Crea una entrada nueva en el blog</p>
+        <hr/>
+
+        <!-- Formulario de crear entrada nueva -->
+        <form action="" class="col-md-12 p-0" #nuevaEntrada="ngForm" (ngSubmit)="onSubmit(nuevaEntrada)">
+            <div class="col-md-8 p-0 float-left">
+                <div class="form-group">
+                    <label for="titulo">Título</label>
+                    <input type="text" name="titulo" #titulo="ngModel" [(ngModel)]="entrada.titulo" class="form-control" required>
+                    <small *ngIf="!titulo.valid && titulo.touched" class="invalid-feedback d-block">
+                        El título no es válido
+                    </small>
+                </div>
+                <div class="form-group">
+                    <label for="contenido">Contenido</label>
+                    <textarea [froalaEditor]="opcionesFroala" name="contenido" #contenido="ngModel" [(ngModel)]="entrada.contenido"></textarea>
+                    <small *ngIf="!contenido.valid && contenido.touched" class="invalid-feedback d-block">
+                        El contenido no es válido
+                    </small>
+                </div>
+                <input type="submit" value="Guardar" class="btn btn-success" [disabled]="nuevaEntrada.invalid">
+            </div>
+
+            <!-- Categorías -->
+            <div class="col-md-3 p-0 float-right">
+                <div class="form-group">
+                    <label for="categoria_id">Categoría</label>
+                    <select name="categoria_id" #categoria="ngModel" [(ngModel)]="entrada.categoria_id" class="form-control">
+                        <option *ngFor="let categoria of categorias" value="{{categoria.id}}">
+                            {{categoria.nombre}}
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Imagen -->
+            <div class="col-md-3 p-0 float-right" *ngIf="entrada.imagen_id != null">
+                <div class="form-group">
+                    <label for="imagen">Imagen</label>
+                    <div class="btn-eliminar float-right" (click)="eliminaImagen()">
+                        <fa-icon [icon]="faMinusCircle"></fa-icon>
+                    </div>
+                    <img src="{{url + 'medio/' + medio.nombre}}" alt="" class="imagen">
+                </div>
+            </div>
+            <div class="col-md-3 p-0 float-right">
+                <div class="form-group">
+                    <button class="btn btn-outline-success btn-sm btn-seleccionar-imagen" (click)="toggleMedios()" *ngIf="!mediosVisible && entrada.imagen_id == null">Selecciona una imagen</button>
+                    <button class="btn btn-outline-secondary btn-sm btn-seleccionar-imagen" (click)="toggleMedios()" *ngIf="!mediosVisible && entrada.imagen_id != null">Cambiar imagen</button>
+                    <button class="btn btn-outline-secondary btn-sm btn-seleccionar-imagen" (click)="toggleMedios()" *ngIf="mediosVisible">Cerrar biblioteca</button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Etiquetas -->
+        <form action="" #nuevaEtiqueta="ngForm" (ngSubmit)="addEtiqueta(nuevaEtiqueta)">
+            <div class="col-md-3 p-0 float-right">
+                <div class="form-group d-block">
+                    <label for="etiquetas" class="d-block clearfix">Etiquetas</label>
+                    <div class="form-group d-block">
+                        <input type="text" name="etiqueta" #etiqueta="ngModel" [(ngModel)]="etiquetaNueva" placeholder="Añade una etiqueta" class="form-control float-left col-10">
+                        <input type="submit" value="+" class="btn btn-success float-right">
+                    </div>
+                </div>
+                <div class="marco-etiquetas" *ngIf="etiquetas.length != 0">
+                    <form *ngFor="let etiqueta of etiquetas; let indice=index" #etiquetaForm="ngForm" (ngSubmit)="borraEtiqueta($event)" >
+                        <div class="etiqueta float-left">
+                            <label for="{{etiqueta}}" class="m-1">{{etiqueta}}</label>
+                            <input type="hidden" id="indice{{indice}}" name="indice" value="{{indice}}">
+                            <button type="submit" class="btn-eliminar">
+                               <fa-icon [icon]="faMinusCircle"></fa-icon>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </form>
+
+
+
+        
+    </div>
+    
+</div>
+    <div class="col-md-12" *ngIf="mediosVisible">
+        <app-medios></app-medios>
+    </div>
+
+<!-- FIN Contenedor -->
+

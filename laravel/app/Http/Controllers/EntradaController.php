@@ -105,6 +105,7 @@ class EntradaController extends Controller
                     'estado' => 'éxito',
                     'codigo' => 200,
                     'mensaje' => 'La entrada se ha creado correctamente.',
+                    'entrada' => $entrada,
                     'resultado' => $guardar_entrada
                 );
             }else{ //Si no envío un error
@@ -184,7 +185,14 @@ class EntradaController extends Controller
             for($i=0; $i < sizeof($entradas); $i++){
                 //Creo sendos arrays para la entrada y las etiquetas
                 $entrada_array = json_decode($entradas[$i],true);
+                $nombre_usuario = $entradas[$i]->usuario->nombre;
+                $apellidos_usuario = $entradas[$i]->usuario->apellidos;
+                $categoria = $entradas[$i]->categoria->nombre;
                 $etiquetas_array = array('etiquetas' => $entradas[$i]->etiquetas()->pluck('nombre'));
+
+                $entrada_array['nombre'] = $nombre_usuario;
+                $entrada_array['apellidos'] = $apellidos_usuario;
+                $entrada_array['categoria'] = $categoria;
 
                 //Los uno para dar un único resultado con las etiquetas incluidas 
                 $entradas[$i] = array_merge($entrada_array, $etiquetas_array);
@@ -195,7 +203,7 @@ class EntradaController extends Controller
                 'estado' => 'éxito',
                 'codigo' => 200,
                 'mensaje' => 'Entradas encontradas.',
-                'etiqueta' => $entradas
+                'entradas' => $entradas
             );
         }else{  //Si no se ha encontrado devuelvo una respuesta de error
             $respuesta = array(

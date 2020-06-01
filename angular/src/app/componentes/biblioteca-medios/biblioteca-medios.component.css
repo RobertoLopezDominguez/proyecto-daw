@@ -1,0 +1,25 @@
+.tabla-medios{
+    font-size: 10pt;
+}
+
+.thumbnail_medio{
+    object-fit: cover;
+    width: 60px;
+    height: 60px;
+}
+
+.icono-editar{
+    color: green;
+    font-size: 20px;
+}
+
+.icono-borrar{
+    color: red;
+    font-size: 20px;
+}
+
+.mensaje-error{
+    margin: 3px;
+    color: red;
+    text-align: center;
+}

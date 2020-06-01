@@ -71,9 +71,9 @@
             Administración
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-              <a class="dropdown-item" href="#">Entradas</a>
+              <a class="dropdown-item" [routerLink]="['/entradas']">Entradas</a>
               <a class="dropdown-item" [routerLink]="['/categorias']">Categorías</a>
-              <a class="dropdown-item" href="#">Medios</a>
+              <a class="dropdown-item" [routerLink]="['/medios']">Medios</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item" href="#">Administración de Usuarios</a>
             </div>
@@ -91,6 +91,8 @@
             {{ identidad.nombre + " " + identidad.apellidos }}
             </a>
             <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item" [routerLink]="['/nueva-entrada']">Nueva entrada</a>
+              <div class="dropdown-divider"></div>
               <a class="dropdown-item" [routerLink]="['/mi-perfil']">Mi perfil</a>
               <a class="dropdown-item" [routerLink]="['/logout/1']">Cerrar sesión</a>
             </div>

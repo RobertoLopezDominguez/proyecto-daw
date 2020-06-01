@@ -21,7 +21,7 @@ export class PerfilUsuarioComponent implements OnInit {
   public afuConfig = {
       multiple: false,
       formatsAllowed: ".jpg, .png, jpeg, .gif",
-      maxSize: "100",
+      maxSize: "50",
       uploadAPI:  {
         url: global.url + "usuario/imagen",
         headers: {

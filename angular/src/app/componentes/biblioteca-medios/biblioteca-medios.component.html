@@ -1,0 +1,47 @@
+<!-- Contenedor -->
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+    <div  class="col-md-12">
+      <div *ngIf="error != null" class="mensaje-error justify-content-center">
+        <span>{{error}}</span>
+      </div>
+        <!-- Tabla con la lista de entradas -->
+        <table class="table table-striped tabla-medios">
+            <thead class="thead-dark">
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Imagen</th>
+                <th scope="col">Título</th>
+                <th scope="col">Texto alternativo</th>
+                <th scope="col">Leyenda</th>
+                <th scope="col">Descripción</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Archivo</th>
+                <th scope="col" *ngIf="rutaActual.url == '/medios'">Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let medio of medios" (click)="seleccionaMedio(medio)">
+                <th scope="row">{{medio.id}}</th>
+                <td><img src="{{url + 'medio/' + medio.nombre}}" alt="" class="thumbnail_medio" (click)="seleccionaMedio(medio)"></td>
+                <td>{{medio.titulo}}</td>
+                <td>{{medio.texto_alt}}</td>
+                <td>{{medio.leyenda}}</td>
+                <td>{{medio.descripcion}}</td>
+                <td>{{medio.estado}}</td>
+                <td>{{medio.nombre}}</td>
+                <td *ngIf="rutaActual.url == '/medios'">
+                    <span [routerLink]="['/editar-medio/', medio.id]" title="Editar imagen" alt="Editar imagen">
+                      <fa-icon class="icono-editar" [icon]="faEdit"></fa-icon>
+                    </span>
+                    <span> |  </span>
+                    <span (click)="borraMedio(medio.id)" title="Borrar imagen" alt="Borrar imagen">
+                      <fa-icon class="icono-borrar" [icon]="faTrashAlt"></fa-icon>
+                    </span>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+    </div> 
+</div>
+<!-- FIN Contenedor -->

@@ -1,0 +1,33 @@
+.marco-etiquetas{
+    height: auto;
+    width: 100%;
+    margin-top: 10px;
+    border: 1px dotted grey;
+    display:inline-block;
+}
+
+.etiqueta{
+    margin: 5px;
+    padding: 3px;
+    border: 1px solid #999;
+    border-radius: 5%;
+    background-color: #eee;
+    font-size: x-small;
+    display:inline-block;
+}
+
+.btn-eliminar{
+    color: red;
+    border: none;
+    background: none;
+}
+
+.imagen{
+    object-fit: scale-down;
+    width: 100%;
+}
+
+.btn-seleccionar-imagen{
+    margin-top: 5px;
+    width: 100%;
+}

@@ -13,7 +13,7 @@ class MedioController extends Controller
 
         //Añado el middleware de autenticación a todos los métodos salvo las excepciones
         $this->middleware('api.auth', [
-            'except' => ['mostrar', 'listarTodos']
+            'except' => ['mostrar', 'listarTodos','getMedio']
         ]);
     } 
 
@@ -25,72 +25,57 @@ class MedioController extends Controller
      */
     public function crear(Request $request){
 
-        //Recoger los datos en un JSON
-        $json = $request->input('json', null); //En caso de no llegar el valor sería nulo
+        //Recojo la imagen de la petición
+        $imagen = $request->file('file0'); 
 
-        //Decodificar el JSON para convertirlo en un objeto
-        $parametros_array = json_decode($json, true);
+        //Valido que el archivo sea una imagen
+        $validar = \Validator::make($request->all(), [
+            'file0' => 'required|image|mimes:jpg,jpeg,png,gif'
+        ]);
 
-        //Validar los datos que recibimos
-        $validar = \Validator::make($parametros_array, [
-            'nombre'        => 'required|max:255|unique:medios',
-            'ruta'          => 'required|max:255|unique:medios',
-            'tipo'          => 'required|alpha|max:50',
-            'estado'        => 'required|alpha|max:50',
-            'titulo'        => 'max:255',
-            'texto_alt'     => 'max:255',
-            'leyenda'       => 'max:255'
-        ]); 
+        //Compruebo que la imagen ha llegado y es válida
+        if($imagen && !$validar->fails()){
 
-        //Compruebo si la validación ha fallado
-        if($validar->fails()){
+            //Creo un nombre para la imagen añadiendo la hora actual al nombre original
+            $nombre_imagen = time()."_".$imagen->getClientOriginalName();
 
-            //En caso de fallo devuelvo una respuesta con el error
-            $respuesta = array(
-                'estado' => 'error',
-                'codigo' => 400,
-                'mensaje' => 'El medio no se ha podido crear.',
-                'errores' => $validar->errors()
-            );
+            //Guardo el fihero en el disco 'usuarios'
+            \Storage::disk('medios')->put($nombre_imagen, \File::get($imagen));
 
-        }else{ //Si a validación es correcta procedo a dar de alta al medio
-
-            //Creamos un nuevo medio
+            //Creo un nuevo medio
             $medio = new Medio();
 
-            //Asignamos al medio los valores requeridos que han llegado
-            $medio->nombre = $parametros_array['nombre'];
-            $medio->ruta = $parametros_array['ruta'];
-            $medio->tipo = $parametros_array['tipo'];
-            $medio->estado = $parametros_array['estado'];
-
-            //Asignamos el resto de valores según hayan llegado o no
-            if(isset($parametros_array['titulo'])) $medio->titulo = $parametros_array['titulo'];
-            if(isset($parametros_array['texto_alt'])) $medio->texto_alt = $parametros_array['texto_alt'];
-            if(isset($parametros_array['leyenda'])) $medio->leyenda = $parametros_array['leyenda'];
-            if(isset($parametros_array['descripcion'])) $medio->descripcion = $parametros_array['descripcion'];
+            //Asigno los valores obligatorios al nuevo medio
+            //Nombre
+            $medio->nombre = $nombre_imagen;
+            //ruta
+            $medio->ruta = 'api/medio/'.$nombre_imagen;
+            //tipo
+            $cadena_nombre = explode('.', $nombre_imagen);
+            $extension = end($cadena_nombre);
+            $medio->tipo = $extension;
+            //Estado (Al crear por defecto 'Publicado')
+            $medio->estado = 'Publicado';
 
             //Guardamos el medio en la base de datos
             $guardar_medio = $medio->save();
 
-            //Si se ha guardado correctamente envío una respuesta de éxito
-            if($guardar_medio){
-                $respuesta = array(
-                    'estado' => 'éxito',
-                    'codigo' => 200,
-                    'mensaje' => 'El medio se ha creado correctamente.',
-                    'resultado' => $guardar_medio
-                );
-            }else{ //Si no envío un error
-                $respuesta = array(
-                    'estado' => 'error',
-                    'codigo' => 500,
-                    'mensaje' => 'Error al escribir en la base de datos.',
-                    'resultado' => $guardar_medio
-                );
-            }
-            
-        } 
+            $respuesta = array(
+                'codigo' => 200,
+                'estado' => 'éxito',
+                'mensaje' => 'El medio se ha creado correctamente.',
+                'medio' => $medio,
+                'imagen' => $nombre_imagen
+            );
+
+
+        }else{ //Si no llega devuelco un error
+            $respuesta = array(
+                'estado' => 'error',
+                'codigo' => 400,
+                'mensaje' => 'No es una imagen válida.'
+            );
+        }
 
         //Devuelvo la respuesta con el código de la misma
         return response()->json($respuesta, $respuesta['codigo']);
@@ -102,7 +87,7 @@ class MedioController extends Controller
      * Recibe un ID
      * 
      * Método HTTP: GET
-     * Ruta: /api/medio/{id}
+     * Ruta: /api/medio/id/{id}
      */
     public function mostrar($id){
 
@@ -190,9 +175,6 @@ class MedioController extends Controller
             //Valido los datos recibidos
             $validar = \Validator::make($parametros_array, [
                 'id'            => 'required|numeric',
-                'nombre'        => 'max:255|unique:medios',
-                'ruta'          => 'max:255|unique:medios',
-                'tipo'          => 'alpha|max:50',
                 'estado'        => 'alpha|max:50',
                 'titulo'        => 'max:255',
                 'texto_alt'     => 'max:255',
@@ -212,8 +194,12 @@ class MedioController extends Controller
 
             }else{ //Si a validación es correcta procedo a actualizar el medio
 
-                //Quito los parámetros que no quiero actualizar por seguridad
+                //Quito los parámetros que no quiero actualizar
+                unset($parametros_array['nombre']);
+                unset($parametros_array['ruta']);
+                unset($parametros_array['tipo']);
                 unset($parametros_array['created_at']);
+                unset($parametros_array['updated_at']);
 
                 //Actualizo el perfil en la base de datos
                 $actualizar_medio = Medio::where('id', $parametros_array['id'])->update($parametros_array);
@@ -369,7 +355,7 @@ class MedioController extends Controller
     }
 
     /**
-     * Método que devuelve la imagen del usuario
+     * Método que devuelve un medio
      */
     public function getMedio($nombre_medio) {
 
@@ -379,7 +365,7 @@ class MedioController extends Controller
         //Si existe
         if ($isset) {
             //Recupero el medio
-            $file = \Storage::disk('medios')->get($nombre_medios);
+            $file = \Storage::disk('medios')->get($nombre_medio);
 
             //Devuelvo el medio
             return new Response($file, 200);
