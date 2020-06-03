@@ -64,7 +64,7 @@ export class NuevaEntradaComponent implements OnInit, DoCheck {
     this.getCategorias();
 
     //Creo un objeto de tipo Entrada para ir rellenándolo
-    this.entrada = new Entrada(1,this.identidad.id,1,'Borrador','','',null,this.etiquetas,'','');
+    this.entrada = new Entrada(1,this.identidad.id,1,'Borrador','','',null,this.etiquetas);
     this.medio = new Medio(
       1, '', '', '', 'Publicada', '', '', '', '',null
     );
@@ -163,5 +163,7 @@ export class NuevaEntradaComponent implements OnInit, DoCheck {
     this.entrada.imagen_id = null;
     this._medioService.clearImagen();
   }
+
+  cambiaEstado(){}
 
 }

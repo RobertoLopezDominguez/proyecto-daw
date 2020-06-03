@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Entrada;
 use App\Etiqueta;
+use App\Categoria;
 
 class EntradaController extends Controller
 {
@@ -14,7 +15,7 @@ class EntradaController extends Controller
 
         //Añado el middleware de autenticación a todos los métodos salvo las excepciones
         $this->middleware('api.auth', [
-            'except' => ['mostrar', 'listarTodas']
+            'except' => ['mostrar', 'listarTodas', 'listarTodasPublicadas', 'listarTodasPublicadasByCategoria']
         ]);
     } 
     
@@ -218,6 +219,113 @@ class EntradaController extends Controller
     }
 
     /**
+     * Función que lista todas las entradas publicadas
+     * 
+     * No recibe ningún parámetro
+     * 
+     * Método HTTP: GET
+     * Ruta: /api/entradaspublicadas
+     */
+    public function listarTodasPublicadas(){
+
+        //Recuperamos todas las etiqueta publicadas
+        $entradas = Entrada::where('estado', 'Publicada')->get();  
+
+        //Si la respuesta es un objeto es que se ha encontrado
+        if(is_object($entradas)){
+
+            //recorro todas las entradas para añadirle las etiquetas
+            for($i=0; $i < sizeof($entradas); $i++){
+                //Creo sendos arrays para la entrada y las etiquetas
+                $entrada_array = json_decode($entradas[$i],true);
+                $nombre_usuario = $entradas[$i]->usuario->nombre;
+                $apellidos_usuario = $entradas[$i]->usuario->apellidos;
+                $categoria = $entradas[$i]->categoria->nombre;
+                $etiquetas_array = array('etiquetas' => $entradas[$i]->etiquetas()->pluck('nombre'));
+
+                $entrada_array['nombre'] = $nombre_usuario;
+                $entrada_array['apellidos'] = $apellidos_usuario;
+                $entrada_array['categoria'] = $categoria;
+
+                //Los uno para dar un único resultado con las etiquetas incluidas 
+                $entradas[$i] = array_merge($entrada_array, $etiquetas_array);
+            }
+
+            //Devuelvo un códido de éxito y las etiqueta
+            $respuesta = array(
+                'estado' => 'éxito',
+                'codigo' => 200,
+                'mensaje' => 'Entradas encontradas.',
+                'entradas' => $entradas
+            );
+        }else{  //Si no se ha encontrado devuelvo una respuesta de error
+            $respuesta = array(
+                'estado' => 'error',
+                'codigo' => 404,
+                'mensaje' => 'Las entradas no se han encontrado.'
+            );
+        }
+
+        //Devuelvo la respuesta con el código de la misma
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
+        /**
+     * Función que lista todas las entradas publicadas por categoría
+     * 
+     * Recibe la categoría
+     * 
+     * Método HTTP: GET
+     * Ruta: /api/entradaspublicadas/categoria/{id}
+     */
+    public function listarTodasPublicadasByCategoria($categoria_id){
+
+        //Defino las condiciones para el Where
+        $condiciones = ['estado' => 'Publicada', 'categoria_id' => $categoria_id];
+
+        //Recuperamos todas las etiqueta publicadas de la categoría
+        $entradas = Entrada::where($condiciones)->get();  
+
+        //Si la respuesta es un objeto es que se ha encontrado
+        if(is_object($entradas)){
+
+            //recorro todas las entradas para añadirle las etiquetas
+            for($i=0; $i < sizeof($entradas); $i++){
+                //Creo sendos arrays para la entrada y las etiquetas
+                $entrada_array = json_decode($entradas[$i],true);
+                $nombre_usuario = $entradas[$i]->usuario->nombre;
+                $apellidos_usuario = $entradas[$i]->usuario->apellidos;
+                $categoria = $entradas[$i]->categoria->nombre;
+                $etiquetas_array = array('etiquetas' => $entradas[$i]->etiquetas()->pluck('nombre'));
+
+                $entrada_array['nombre'] = $nombre_usuario;
+                $entrada_array['apellidos'] = $apellidos_usuario;
+                $entrada_array['categoria'] = $categoria;
+
+                //Los uno para dar un único resultado con las etiquetas incluidas 
+                $entradas[$i] = array_merge($entrada_array, $etiquetas_array);
+            }
+
+            //Devuelvo un códido de éxito y las etiqueta
+            $respuesta = array(
+                'estado' => 'éxito',
+                'codigo' => 200,
+                'mensaje' => 'Entradas encontradas.',
+                'entradas' => $entradas
+            );
+        }else{  //Si no se ha encontrado devuelvo una respuesta de error
+            $respuesta = array(
+                'estado' => 'error',
+                'codigo' => 404,
+                'mensaje' => 'Las entradas no se han encontrado.'
+            );
+        }
+
+        //Devuelvo la respuesta con el código de la misma
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
+    /**
      * Función que actualiza una entrada ya existente
      * 
      * Se debe enviar un JSON con la ID y los datos a actualizar
@@ -263,7 +371,7 @@ class EntradaController extends Controller
                 $msg_etiquetas = "";
 
                 //Recupero la entrada a actualiar
-                $entrada = Entrada::find($parametros_array['id']); 
+                $entrada = Entrada::find($parametros_array['id']);
 
                 //Estraigo las etiquetas si se han enviado
                 if(isset($parametros_array['etiquetas'])){
@@ -273,7 +381,10 @@ class EntradaController extends Controller
                     //Las elimino de los parámetros de la entrada
                     unset($parametros_array['etiquetas']);
 
-                    //Recorro todas las etiquetas
+                    //Desvinculo todas las etiquetas de la entrada
+                    $entrada->etiquetas()->detach();
+
+                    //Recorro todas las etiquetas de la request
                     foreach($etiquetas as $etiqueta){
 
                         //Compruebo si la etiqueta ya existe
@@ -308,6 +419,7 @@ class EntradaController extends Controller
 
                 //Quito los parámetros que no quiero actualizar por seguridad
                 unset($parametros_array['created_at']);
+                unset($parametros_array['updated_at']);
 
                 //Actualizo la entrada en la base de datos
                 $actualizar_entrada= Entrada::where('id', $parametros_array['id'])->update($parametros_array);
@@ -319,6 +431,7 @@ class EntradaController extends Controller
                         'estado' => 'éxito',
                         'codigo' => 200,
                         'mensaje' => 'Entrada actualizada correctamente.',
+                        'entrada' => $entrada,
                         'resultado' => $actualizar_entrada,
                         'etiquetas' => $msg_etiquetas
                     );
@@ -345,5 +458,78 @@ class EntradaController extends Controller
         //Devuelvo la respuesta con el código de la misma
         return response()->json($respuesta, $respuesta['codigo']);
     }    
+
+    /**
+     * Función que elimina una entrada
+     * 
+     * Recibe el ID como parámetro
+     * 
+     * Método HTTP: DELETE
+     * Ruta: /api/entrada/{id}
+     */
+    public function borrar($id){
+
+        //Compruebo si ha llegado el ID
+        if(!isset($id)){
+            //Si no se ha recibido el ID
+            $respuesta = array(
+                'estado' => 'error',
+                'codigo' => 400,
+                'mensaje' => 'No se ha recibido el ID.'
+            );
+        } else { //Si llega el ID
+
+            //Recupero la entrada
+            $entrada = Entrada::find($id);
+
+            //Compruebo si existe
+            if(!is_object($entrada)){
+                //Si no existe muestro un error
+                $respuesta = array(
+                    'estado' => 'error',
+                    'codigo' => 404,
+                    'mensaje' => 'La entrada no existe.'
+                );
+            } else { //Si existe la elimino
+                try{
+                    //Desvinculo todas las etiquetas de la entrada
+                    $entrada->etiquetas()->detach();
+                    //Borro la entrada
+                    $borrar_entrada = Entrada::destroy($id);
+                } catch (\Illuminate\Database\QueryException $e){
+                    $respuesta = array(
+                        'estado' => 'error',
+                        'codigo' => 500,
+                        'mensaje' => 'Error al borrar la entrada',
+                        'error' => $e
+                    );
+                    //Devuelvo la respuesta con el código de la misma
+                    return response()->json($respuesta, $respuesta['codigo']);
+                }
+
+                //Si la operación se ha realizado envío una respuesta de éxito
+                if($borrar_entrada){
+
+                    $respuesta = array(
+                        'estado' => 'éxito',
+                        'codigo' => 200,
+                        'mensaje' => 'Entrada borrada correctamente.',
+                        'resultado' => $borrar_entrada
+                    );
+                }else{ //Si no muestro un mensaje de error
+
+                    $respuesta = array(
+                        'estado' => 'error',
+                        'codigo' => 500,
+                        'mensaje' => 'Error al borrar la entrada.',
+                        'resultado' => $borrar_entrada
+                    );
+                }
+            }
+        }
+
+        //Devuelvo la respuesta con el código de la misma
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
 
 }

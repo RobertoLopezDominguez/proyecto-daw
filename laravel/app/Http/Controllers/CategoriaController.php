@@ -193,6 +193,7 @@ class CategoriaController extends Controller
 
                 //Quito los parámetros que no quiero actualizar por seguridad
                 unset($parametros_array['created_at']);
+                unset($parametros_array['updated_at']);
 
                 //Actualizo el perfil en la base de datos
                 $actualizar_categoria = Categoria::where('id', $parametros_array['id'])->update($parametros_array);

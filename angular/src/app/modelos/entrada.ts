@@ -9,8 +9,6 @@ export class Entrada{
         public titulo: string,
         public contenido: string,
         public imagen_id: string,
-        public etiquetas: string[],
-        public createAt: any,
-        public updatedAt: any
+        public etiquetas: string[]
     ){}
 }

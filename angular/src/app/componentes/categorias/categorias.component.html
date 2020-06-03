@@ -11,16 +11,33 @@
           <thead>
             <tr>
               <th scope="col">#</th>
-              <th scope="col">Nobre</th>
-              <th scope="col">Handle</th>
+              <th scope="col">Nombre</th>
+              <th scope="col">Acciones</th>
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let c of categorias">
-              <th scope="row">{{c.id}}</th>
-              <td>{{c.nombre}}</td>
-              <td></td>
-            </tr>
+
+              <tr *ngFor="let c of categorias">
+                <th scope="row">{{c.id}}</th>
+                <td>
+                  <span *ngIf="c.id != editar_id">{{c.nombre}}</span>
+                  <input type="text" #editarCategoria="ngModel" [(ngModel)]="editar_nombre" *ngIf="c.id == editar_id">
+                </td>
+                <td *ngIf="editar_id != c.id">
+                  <span title="Editar categoría" (click)="editar(c.id)">
+                    <fa-icon class="btn-acciones text-success" [icon]="faEdit"></fa-icon>
+                  </span>
+                  <span title="Eliminar categoría" (click)="eliminar(c.id)">
+                    <fa-icon class="btn-acciones text-danger" [icon]="faTrashAlt"></fa-icon>
+                  </span>
+                </td>
+                <td *ngIf="editar_id == c.id">
+                  <button class="btn btn-success" (click)="guardarCambios(c)">Actualizar</button>
+
+                </td>
+                            
+              </tr>
+
           </tbody>
         </table>
       </div>
@@ -44,11 +61,11 @@
         <div class="alertas-categorias">
           <!-- Alerta que se mostrará si se ha realizado correctamente -->
           <div class="alert alert-success" *ngIf="estado == 'éxito'">
-            La categoría '{{categoriaCreada}}' se ha creado con éxito.
+            {{mensaje}}
           </div> 
           <!-- Alerta que se mostrará si no se ha completado -->
           <div class="alert alert-danger" *ngIf="estado == 'error'">
-              La categoria no se ha podido crear.
+              Se ha producido un error
           </div>
         </div>
 

@@ -6,5 +6,6 @@
 }
 
 .avatar_mask img{
-    width: 80px;
+    object-fit: cover;
+    width: 40px;
 }

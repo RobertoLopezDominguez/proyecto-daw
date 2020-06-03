@@ -38,8 +38,8 @@ class UsuarioController extends Controller
             'perfil_id'     => 'required|numeric',
             'password'      => 'required|max:255',
             'estado'        => 'required|alpha|max:50',
-            'nombre'        => 'alpha|max:50',
-            'apellidos'     => 'alpha|max:255',
+            'nombre'        => 'max:50',
+            'apellidos'     => 'max:255',
             'imagen'        => 'alpha_dash|max:255'
         ]); 
 
@@ -184,8 +184,8 @@ class UsuarioController extends Controller
                 'perfil_id'     => 'numeric',
                 'password'      => 'max:255',
                 'estado'        => 'alpha|max:50',
-                'nombre'        => 'alpha|max:50',
-                'apellidos'     => 'alpha|max:255',
+                'nombre'        => 'max:50',
+                'apellidos'     => 'max:255',
                 'imagen'        => 'max:255'
             ]); 
 

@@ -2,22 +2,32 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { EntradaService } from '../../servicios/entrada.service';
+import { faEdit, faTrashAlt, faTimesCircle, faPlayCircle, faTrashRestoreAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { Entrada } from '../../modelos/entrada';
 import { global } from '../../servicios/global';
+import { NgbNav} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-entradas',
   templateUrl: './entradas.component.html',
   styleUrls: ['./entradas.component.css'],
-  providers: [UsuarioService, EntradaService]
+  providers: [UsuarioService, EntradaService, NgbNav]
 })
 export class EntradasComponent implements OnInit {
 
   public page_title: string;
   public identidad;
   public token;
-  public estado;
   public entradas;
+  active = 1;
+
+  //Iconos
+  public faEdit = faEdit;
+  public faTrashAlt = faTrashAlt;
+  public faTimesCircle = faTimesCircle;
+  public faPlayCircle = faPlayCircle;
+  public faTrashRestoreAlt = faTrashRestoreAlt;
+  public faExclamationTriangle = faExclamationTriangle;
 
   constructor(
     private _route: ActivatedRoute,
@@ -45,6 +55,36 @@ export class EntradasComponent implements OnInit {
           console.log(this.entradas);
 
         }
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  cambiaEstado(entrada, estado){
+    //Asigno el nuevo estado a la entrada
+    entrada.estado = estado;
+
+    //Creo un JSON con los datos para actualizar el estaado
+    let entradaAux = {"id" : entrada.id, "estado" : estado};
+    
+    //Actualizo al entrada
+    this._entradaService.editar(this.token, entradaAux, entrada.id).subscribe(
+      response => {
+        console.log(response);
+      },
+      error => {
+        console.log(error);
+      }
+    );
+  }
+
+  eliminarDefinitivamente(id){
+    this._entradaService.eliminar(this.token, id).subscribe(
+      response => {
+        console.log(response);
+        this.getEntradas();
       },
       error => {
         console.log(error);

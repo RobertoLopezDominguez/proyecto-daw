@@ -25,6 +25,8 @@
                     </small>
                 </div>
                 <input type="submit" value="Guardar" class="btn btn-success" [disabled]="nuevaEntrada.invalid">
+                <button class="btn btn-primary btn-entradas" *ngIf="entrada.estado == 'Borrador'" (click)="cambiaEstado()">Publicar</button>
+                <button class="btn btn-secondary btn-entradas" *ngIf="entrada.estado == 'Publicada'" (click)="cambiaEstado()">Dejar de publicar</button>
             </div>
 
             <!-- Categorías -->

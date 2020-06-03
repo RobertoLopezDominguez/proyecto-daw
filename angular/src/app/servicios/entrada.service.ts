@@ -44,6 +44,7 @@ export class EntradaService{
 
     editar(token, entrada, id): Observable<any>{
         let json = JSON.stringify(entrada);
+        console.log(json);
         let parametros = "json="+json;
 
         //Cabeceras HTTP
@@ -52,5 +53,14 @@ export class EntradaService{
 
         //Devuelvo la petición AJAX que devuelve la entrada a editar
         return this._http.put(this.url+'entrada', parametros, {headers: headers});
+    }
+
+    eliminar(token, id){
+        //Cabeceras HTTP
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+        .set('Authorization', token);
+
+        //Devuelvo la petición AJAX que devuelve la entrada a editar
+        return this._http.delete(this.url+'entrada/'+id, {headers: headers});        
     }
 }

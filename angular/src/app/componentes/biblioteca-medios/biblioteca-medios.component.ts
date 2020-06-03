@@ -67,6 +67,7 @@ export class BibliotecaMediosComponent implements OnInit {
 
   seleccionaMedio(medio){
     this._medioService.setMedioSeleccionado(medio.id);
+    console.log("Hola");
   }
 
   borraMedio(id){

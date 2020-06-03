@@ -34,4 +34,25 @@ export class CategoriaService{
         //Devuelvo la petición AJAX para dar de alta una nueva categoría
         return this._http.get(this.url+'categorias', {headers: headers});
     }
+
+    eliminar(token, id):Observable<any>{
+        //Cabeceras HTTP
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+        .set('Authorization', token);
+
+        //Devuelvo la petición AJAX para dar de alta una nueva categoría
+        return this._http.delete(this.url+'categoria/'+id, {headers: headers});        
+    }
+
+    actualizar(token, categoria):Observable<any>{
+        let  json = JSON.stringify(categoria);
+        let parametros = "json="+json;
+
+        //Cabeceras HTTP
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+                                        .set('Authorization', token);
+
+        //Devuelvo la petición AJAX para dar de alta una nueva categoría
+        return this._http.put(this.url+'categoria', parametros, {headers: headers});
+    }
 }

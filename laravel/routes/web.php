@@ -78,6 +78,8 @@ Route::delete('/api/etiqueta/{id}', 'EtiquetaController@borrar')->name('etiqueta
 //Rutas entradas
 Route::get('/api/entrada/{id}', 'EntradaController@mostrar')->name('entrada.mostrar'); //Devolver una entrada por id
 Route::get('/api/entradas', 'EntradaController@listarTodas')->name('entrada.mostrar'); //Devolver todas las entradas
+Route::get('/api/entradaspublicadas', 'EntradaController@listarTodasPublicadas')->name('entrada.mostrarPublicadas'); //Devolver todas las entradas publicadas
+Route::get('/api/entradaspublicadas/categoria/{id}', 'EntradaController@listarTodasPublicadasByCategoria')->name('entrada.mostrarPublicadasCategoria'); //Devolver todas las entradas publicadas por categoría
 Route::post('/api/entrada', 'EntradaController@crear')->name('entrada.crear'); //Crea una entrada nuevo
 Route::put('/api/entrada', 'EntradaController@actualizar')->name('entrada.actualizar'); //Actualiza una entrada 
 Route::delete('/api/entrada/{id}', 'EntradaController@borrar')->name('entrada.borrar'); //Borra una entrada

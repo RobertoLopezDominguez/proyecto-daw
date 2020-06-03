@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, DoCheck } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { CategoriaService } from '../../servicios/categoria.service';
 import { EntradaService } from '../../servicios/entrada.service';
 import { MedioService } from '../../servicios/medio.service';
 import { Entrada } from '../../modelos/entrada';
+import { Medio } from 'src/app/modelos/medio';
 import { global } from '../../servicios/global';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
 import { ThrowStmt } from '@angular/compiler';
@@ -16,7 +17,7 @@ import { ThrowStmt } from '@angular/compiler';
   styleUrls: ['../nueva-entrada/nueva-entrada.component.css'],
   providers: [UsuarioService, CategoriaService, EntradaService, MedioService]
 })
-export class EditarEntradaComponent implements OnInit {
+export class EditarEntradaComponent implements OnInit, DoCheck {
 
   public page_title: string;
   public identidad;
@@ -38,8 +39,6 @@ export class EditarEntradaComponent implements OnInit {
     height: 200
   };
 
-
-
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -56,11 +55,20 @@ export class EditarEntradaComponent implements OnInit {
    }
 
   ngOnInit(): void {
+        //Limpio el localStorage para asegurarme de que no hay ninguna imagen almacenada
+        this._medioService.clearImagen();
     this.getCategorias();
     //Creo un objeto de tipo Entrada para ir rellenándolo
-    this.entrada = new Entrada(1,this.identidad.id,1,'Borrador','','',null,this.etiquetas,'','');
+    this.entrada = new Entrada(1,this.identidad.id,1,'Borrador','','',null,this.etiquetas);
+    this.medio = new Medio(
+      1, '', '', '', 'Publicada', '', '', '', '',null
+    );
 
     this.getEntrada();
+  }
+
+  ngDoCheck(){
+    this.compruebaImagen();
   }
 
   /**
@@ -92,6 +100,7 @@ export class EditarEntradaComponent implements OnInit {
           response => {
             if(response.estado == 'éxito'){
               this.entrada = response.entrada;
+
               this.etiquetas = this.entrada.etiquetas;
               console.log(this.entrada);
               console.log(this.etiquetas);
@@ -108,12 +117,11 @@ export class EditarEntradaComponent implements OnInit {
   onSubmit(form){
 
     //Guardo el post en la base de datos
-    this._entradaService.crear(this.token, this.entrada).subscribe(
+    this._entradaService.editar(this.token, this.entrada, this.entrada.id).subscribe(
       response => {
         if(response.estado = 'éxito'){
-          this.entrada = response.entrada;
+          this.getEntrada();
           this.estado = 'éxito';
-          console.log(this.entrada);
         }else{
           this.estado = 'error';
         }
@@ -159,5 +167,28 @@ export class EditarEntradaComponent implements OnInit {
     this.entrada.imagen_id = null;
     this._medioService.clearImagen();
   }
+
+  cambiaEstado(){
+    if(this.entrada.estado == 'Borrador'){
+      this.entrada.estado = 'Publicada';
+    }else{
+      this.entrada.estado = 'Borrador';
+    }
+  }
+
+  compruebaImagen(){
+    this.entrada.imagen_id = this._medioService.getMedioSeleccionado();
+    if(this.entrada.imagen_id != null){
+      this._medioService.getMedioById(this.entrada.imagen_id).subscribe(
+        response => {
+          if(response.estado == 'éxito'){
+            this.medio.nombre = response.medio.nombre;
+          }
+        },
+        error => {
+        }
+      );
+    }
+}
 }
 
