@@ -34,7 +34,9 @@ export class EntradasComponent implements OnInit {
     private _router: Router,
     private _usuarioService: UsuarioService,
     private _entradaService: EntradaService
-  ) { }
+  ) {
+    
+   }
 
   ngOnInit(): void {
 

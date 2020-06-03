@@ -35,6 +35,20 @@ export class EntradaService{
         return this._http.get(this.url+'entradas', {headers: headers});
     }
 
+    getEntradasPublicadas():Observable<any>{
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+        //Devuelvo la petición AJAX con todas las entradas
+        return this._http.get(this.url+'entradaspublicadas', {headers: headers});
+    }
+
+    getEntradasPublicadasByCategoria(id):Observable<any>{
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+        //Devuelvo la petición AJAX con todas las entradas
+        return this._http.get(this.url+'entradaspublicadas/categoria/' + id, {headers: headers});
+    }
+
     getEntrada(id):Observable<any>{
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
@@ -43,7 +57,17 @@ export class EntradaService{
     }
 
     editar(token, entrada, id): Observable<any>{
-        let json = JSON.stringify(entrada);
+        //Copio el objeto 'entrada' para poder eliminar lo que no quiero enviar
+        let entradaAux = JSON.parse(JSON.stringify(entrada));
+        
+        //Elimino las propiedades que no quiero enviar
+        delete entradaAux.nombre;
+        delete entradaAux.apellidos;
+        delete entradaAux.categoria;
+        delete entradaAux.imagen;
+
+        //Formateo los parámetros a enviar
+        let json = JSON.stringify(entradaAux);
         console.log(json);
         let parametros = "json="+json;
 

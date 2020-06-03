@@ -90,7 +90,7 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
   }
 
   getEntrada(){
-    //Recupero el Id del post de la URL
+    //Recupero el Id de la entrada de la URL
     this._route.params.subscribe(
       params => {
         let id = params['id'];

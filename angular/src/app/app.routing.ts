@@ -15,6 +15,8 @@ import { EntradasComponent } from './componentes/entradas/entradas.component';
 import { EditarEntradaComponent } from './componentes/editar-entrada/editar-entrada.component';
 import { MediosComponent } from './componentes/medios/medios.component';
 import { EditarMedioComponent } from './componentes/editar-medio/editar-medio.component';
+import { EntradaUnicaComponent } from './componentes/entrada-unica/entrada-unica.component';
+import { CategoriaComponent } from './componentes/categoria/categoria.component';
 
 //Definir las rutas
 const appRoutes: Routes = [
@@ -31,6 +33,8 @@ const appRoutes: Routes = [
     {path: 'editar-entrada/:id', component: EditarEntradaComponent},
     {path: 'editar-medio/:id', component: EditarMedioComponent},
     {path: 'medios', component: MediosComponent},
+    {path: 'entrada/:id', component: EntradaUnicaComponent},
+    {path: 'categoria/:id', component: CategoriaComponent},
     {path: '**', component: ErrorComponent}
 ]; // ** siempre al final
 

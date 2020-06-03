@@ -38,7 +38,7 @@
             <!-- Submenú Categorías -->
             <ul class="dropdown-menu" >
               <li class="nav-item dropdown" *ngFor="let c of categorias">
-                <a class="dropdown-item" href="#">{{c.nombre}}</a>
+                <a class="dropdown-item" [routerLink]="['/categoria/', c.id]">{{c.nombre}}</a>
               </li>
             </ul>
           </li>

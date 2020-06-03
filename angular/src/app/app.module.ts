@@ -29,6 +29,8 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NuevoMedioComponent } from './componentes/nuevo-medio/nuevo-medio.component';
 import { BibliotecaMediosComponent } from './componentes/biblioteca-medios/biblioteca-medios.component';
 import { EditarMedioComponent } from './componentes/editar-medio/editar-medio.component';
+import { EntradaUnicaComponent } from './componentes/entrada-unica/entrada-unica.component';
+import { CategoriaComponent } from './componentes/categoria/categoria.component';
 
 //Declaro los módulos que voy a utilizar
 @NgModule({
@@ -47,7 +49,9 @@ import { EditarMedioComponent } from './componentes/editar-medio/editar-medio.co
     MediosComponent,
     NuevoMedioComponent,
     BibliotecaMediosComponent,
-    EditarMedioComponent
+    EditarMedioComponent,
+    EntradaUnicaComponent,
+    CategoriaComponent
   ],
   imports: [
     BrowserModule,

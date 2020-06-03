@@ -40,7 +40,7 @@ class Entrada extends Model
      * La función devuelve la imagen asociada a la entrada
      * 
      */
-    public function imagen(){
+    public function medio(){
         return $this->belongsTo('App\Medio', 'imagen_id');
     }
 

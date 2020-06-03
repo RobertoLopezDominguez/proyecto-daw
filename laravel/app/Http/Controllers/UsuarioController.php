@@ -157,6 +157,35 @@ class UsuarioController extends Controller
     }
 
     /**
+     * Función que devuelve un usuario por ID
+     */
+    public function getUsuarioById($id){
+        //Recuperamos el usuario bucado por ID
+        $usuario = Usuario::find($id); 
+
+        //Si la respuesta es un objeto es que se ha encontrado
+        if(is_object($usuario)){
+
+            //Devuelvo un códido de éxito y el usuario
+            $respuesta = array(
+                'estado' => 'éxito',
+                'codigo' => 200,
+                'mensaje' => 'Usuario encontrado.',
+                'usuario' => $usuario
+            );
+        }else{  //Si no se ha encontrado devuelvo una respuesta de error
+            $respuesta = array(
+                'estado' => 'error',
+                'codigo' => 404,
+                'mensaje' => 'El usuario no se ha encontrado.'
+            );
+        }
+
+        //Devuelvo la respuesta con el código de la misma
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
+    /**
      * Función que actualiza un usuario ya existente
      * 
      * Se debe enviar un JSON con la ID y los datos a actualizar

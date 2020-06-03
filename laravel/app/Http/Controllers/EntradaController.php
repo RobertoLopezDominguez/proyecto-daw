@@ -143,6 +143,15 @@ class EntradaController extends Controller
             $entrada_array = json_decode($entrada,true);
             $etiquetas_array = array('etiquetas' => $entrada->etiquetas()->pluck('nombre'));
 
+            //Recupero los valores que también quiero devolver
+            $nombre_usuario = $entrada->usuario->nombre;
+            $apellidos_usuario = $entrada->usuario->apellidos;
+            $categoria = $entrada->categoria->nombre;
+            //Los añado a la entrada
+            $entrada_array['nombre'] = $nombre_usuario;
+            $entrada_array['apellidos'] = $apellidos_usuario;
+            $entrada_array['categoria'] = $categoria;
+
             //Los uno para dar un único resultado con las etiquetas incluidas 
             $entrada = array_merge($entrada_array, $etiquetas_array);
 
@@ -241,11 +250,14 @@ class EntradaController extends Controller
                 $nombre_usuario = $entradas[$i]->usuario->nombre;
                 $apellidos_usuario = $entradas[$i]->usuario->apellidos;
                 $categoria = $entradas[$i]->categoria->nombre;
+                $imagen = $entradas[$i]->medio->nombre;
+
                 $etiquetas_array = array('etiquetas' => $entradas[$i]->etiquetas()->pluck('nombre'));
 
                 $entrada_array['nombre'] = $nombre_usuario;
                 $entrada_array['apellidos'] = $apellidos_usuario;
                 $entrada_array['categoria'] = $categoria;
+                $entrada_array['imagen'] = $imagen;
 
                 //Los uno para dar un único resultado con las etiquetas incluidas 
                 $entradas[$i] = array_merge($entrada_array, $etiquetas_array);
@@ -296,11 +308,14 @@ class EntradaController extends Controller
                 $nombre_usuario = $entradas[$i]->usuario->nombre;
                 $apellidos_usuario = $entradas[$i]->usuario->apellidos;
                 $categoria = $entradas[$i]->categoria->nombre;
+                $imagen = $entradas[$i]->medio->nombre;
+
                 $etiquetas_array = array('etiquetas' => $entradas[$i]->etiquetas()->pluck('nombre'));
 
                 $entrada_array['nombre'] = $nombre_usuario;
                 $entrada_array['apellidos'] = $apellidos_usuario;
                 $entrada_array['categoria'] = $categoria;
+                $entrada_array['imagen'] = $imagen;
 
                 //Los uno para dar un único resultado con las etiquetas incluidas 
                 $entradas[$i] = array_merge($entrada_array, $etiquetas_array);

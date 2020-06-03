@@ -28,6 +28,7 @@ Route::get('/', function () {
 
 //Rutas Usuarios
 Route::get('/api/usuario', 'UsuarioController@mostrar')->name('usuario.mostrar'); //Devolver un usuario por id, usuario o email
+Route::get('/api/usuario/{id}', 'UsuarioController@getUsuarioById')->name('usuario.usuarioById'); //Devolver un usuario por id
 Route::post('/api/registro', 'UsuarioController@registro')->name('usuario.registro'); //Registra un usuario nuevo
 Route::put('/api/usuario', 'UsuarioController@actualizar')->name('usuario.actualizar'); //Actualiza un usuario 
 Route::delete('/api/usuario/imagen', 'UsuarioController@borrarImagen')->name('usuario.borrarImagen'); //Borra una imagen de usuario
