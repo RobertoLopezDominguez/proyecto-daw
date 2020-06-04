@@ -31,6 +31,8 @@ import { BibliotecaMediosComponent } from './componentes/biblioteca-medios/bibli
 import { EditarMedioComponent } from './componentes/editar-medio/editar-medio.component';
 import { EntradaUnicaComponent } from './componentes/entrada-unica/entrada-unica.component';
 import { CategoriaComponent } from './componentes/categoria/categoria.component';
+import { ContactoComponent } from './componentes/contacto/contacto.component';
+import { ContactosComponent } from './componentes/contactos/contactos.component';
 
 //Declaro los módulos que voy a utilizar
 @NgModule({
@@ -51,7 +53,9 @@ import { CategoriaComponent } from './componentes/categoria/categoria.component'
     BibliotecaMediosComponent,
     EditarMedioComponent,
     EntradaUnicaComponent,
-    CategoriaComponent
+    CategoriaComponent,
+    ContactoComponent,
+    ContactosComponent
   ],
   imports: [
     BrowserModule,

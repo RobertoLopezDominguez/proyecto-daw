@@ -1,0 +1,68 @@
+<!-- Contenedor -->
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+    <div  class="col-md-6">
+        <!-- Título de la página -->
+        <h1>{{ page_title }}</h1>
+        <hr/>
+    
+        <!-- Alerta que se mostrará si el envío del formulario de contacto se envió correctamente -->
+        <div class="alert alert-success" *ngIf="estado == 'éxito'">
+            El mensaje se envió con éxito. Pronto nos pondremos en contacto contigo
+        </div>
+        <!-- Alerta que se mostrará si no se ha completado -->
+        <div class="alert alert-error" *ngIf="estado == 'error'">
+            El mensaje no se ha podido enviar.
+        </div>
+    
+        <!-- Formulario de contacto-->
+        <!-- Cuando el formulario se envíe llamará al método onSubmit enviándole el formulario -->
+        <form action="" class="col-md-12 ml-0 p-0" #contactoForm="ngForm" (ngSubmit)="onSubmit(contactoForm)">
+            <div class="form-group"> 
+                <label for="nombre">Nombre*</label>
+                <!-- [(ngModel)] a la vez modifica en la clase del componente y viceversa -->
+                <input type="text" name="nombre" class="form-control" #nombre="ngModel" [(ngModel)]="contacto.nombre" required pattern="[A-Za-zÁ-ÿ ]+">
+                <!-- Mensaje de error en caso de que la validación no sea correcta -->
+                <small *ngIf="!nombre.valid && nombre.touched" class="invalid-feedback d-block">
+                    El nombre no es válido
+                </small>
+            </div>
+            <div class="form-group"> 
+                <label for="direccion">Dirección</label>
+                <input type="text" name="direccion" class="form-control" #direccion="ngModel" [(ngModel)]="contacto.direccion" pattern="[A-Za-zÁ-ÿ ]+">
+                <small *ngIf="!direccion.valid && direccion.touched" class="invalid-feedback d-block">
+                    Dirección no válida
+                </small>
+            </div>
+            <div class="form-group"> 
+                <label for="telefno">Teléfono</label>
+                <input type="text" name="telefono" class="form-control" #telefono="ngModel" [(ngModel)]="contacto.telefono"  pattern="[0-9 ]+">
+                <small *ngIf="!telefono.valid && telefono.touched" class="invalid-feedback d-block">
+                    El número de teléfono no tiene un formato válido
+                </small>
+            </div>
+            <div class="form-group"> 
+                <label for="email">Email</label>
+                <input type="email" name="email" class="form-control" #email="ngModel" [(ngModel)]="contacto.email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                <small *ngIf="!email.valid && email.touched" class="invalid-feedback d-block">
+                    El email no es válido
+                </small>
+            </div>
+            <div class="form-group"> 
+                <label for="asunto">Asunto*</label>
+                <input type="text" name="asunto" class="form-control" #asunto="ngModel" [(ngModel)]="contacto.asunto" required pattern="[A-Za-zÁ-ÿ ]+">
+                <!-- Mensaje de error en caso de que la validación no sea correcta -->
+                <small *ngIf="!nombre.valid && nombre.touched" class="invalid-feedback d-block">
+                    El nombre no es válido
+                </small>
+            </div>
+            <div class="form-group"> 
+                <label for="mensaje">Mensaje</label>
+                <textarea name="mensaje" class="form-control" #mensaje="ngModel" [(ngModel)]="contacto.mensaje"></textarea>
+            </div>
+
+            <!-- Botón para enviar el formulario. Deshabilitado si el formulario no está validado -->
+            <input type="submit" value="Enviar" class="btn btn-success" [disabled]="contactoForm.invalid"/>
+        </form>
+    </div> </div>
+    <!-- FIN Contenedor -->
+

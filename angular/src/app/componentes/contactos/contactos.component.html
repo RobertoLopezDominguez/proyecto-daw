@@ -1,0 +1,50 @@
+<!-- Contenedor -->
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+    <div  class="col-md-12">
+        <!-- Título de la página -->
+        <h1>{{ page_title }}</h1>
+    
+        <p>Lista de mensajes de contacto</p>
+
+        <!-- Tabla con la lista de contactos -->
+        <table class="table table-striped tabla-contactos">
+        <thead class="thead-dark">
+            <tr>
+            <th scope="col">#</th>
+            <th scope="col">Nombre</th>
+            <th scope="col">Email</th>
+            <th scope="col">Dirección</th>
+            <th scope="col">Teléfono</th>
+            <th scope="col">Asunto</th>
+            <th scope="col">Mensaje</th>
+            <th scope="col">Dirección IP</th>
+            <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let contacto of contactos">
+                <tr>
+            <th scope="row">{{contacto.id}}</th>
+            <td>{{contacto.nombre}}</td>
+            <td>{{contacto.email}}</td>
+            <td>{{contacto.direccion}}</td>
+            <td>{{contacto.telefono}}</td>
+            <td>{{contacto.asunto}}</td>
+            <td>{{contacto.mensaje}}</td>
+            <td>{{contacto.ip}}</td>
+            <td>   
+                <span  title="Eliminar mensaje" (click)="eliminar(contacto.id)">
+                    <fa-icon class="btn-acciones text-danger" [icon]="faTrashAlt"></fa-icon>
+                </span>
+            </td>
+        </tr>
+            </ng-container>
+        </tbody>
+        </table>
+
+    </div> 
+</div>
+<!-- FIN Contenedor -->
+
+
+
