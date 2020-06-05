@@ -157,6 +157,52 @@ class UsuarioController extends Controller
     }
 
     /**
+     * Método que devuelve todos los usuarios
+     * 
+     * Método HTTP: GET
+     * Ruta: /api/usuarios
+     */
+    public function getUsuarios(){
+        //Recupero todos los usuarios
+        $usuarios = Usuario::all();
+
+        //recorro todos los usuario para añadir el perfil
+        for($i=0; $i < sizeof($usuarios); $i++){
+
+            //Creo un array para los datos del usuario
+            $usuario_array = json_decode($usuarios[$i],true);
+            //Recupero el nombre del perfil
+            $nombre_perfil = $usuarios[$i]->perfil->nombre;
+            //Añado el nombre del perfil al array
+            $usuario_array['perfil'] = $nombre_perfil;
+
+            //Por último lo asigno al usuario en cuestión
+            $usuarios[$i] = $usuario_array;
+        }
+
+        //Si la respuesta es un objeto es que se han encontrado
+        if(is_object($usuarios)){
+
+            //Devuelvo un códido de éxito y el usuario
+            $respuesta = array(
+                'estado' => 'éxito',
+                'codigo' => 200,
+                'mensaje' => 'Usuarios encontrado.',
+                'usuarios' => $usuarios
+            );
+        }else{  //Si no se ha encontrado devuelvo una respuesta de error
+            $respuesta = array(
+                'estado' => 'error',
+                'codigo' => 404,
+                'mensaje' => 'Los usuarios no se han encontrado.'
+            );
+        }
+
+        //Devuelvo la respuesta con el código de la misma
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
+    /**
      * Función que devuelve un usuario por ID
      */
     public function getUsuarioById($id){

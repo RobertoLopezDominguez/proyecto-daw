@@ -1,6 +1,6 @@
 <!-- Contenedor -->
-<div class="col-md-12 mt-5 d-flex justify-content-center">
-    <div  class="col-md-12">
+<div class="col-md-12 p-0 d-flex justify-content-center">
+    <div  class="col-md-12 p-0">
       <div *ngIf="error != null" class="mensaje-error justify-content-center">
         <span>{{error}}</span>
       </div>
@@ -28,7 +28,7 @@
                 <td>{{medio.leyenda}}</td>
                 <td>{{medio.descripcion}}</td>
                 <td>{{medio.estado}}</td>
-                <td>{{medio.nombre}}</td>
+                <td class="col-archivo">{{medio.nombre}}</td>
                 <td *ngIf="rutaActual.url == '/medios'">
                     <span [routerLink]="['/editar-medio/', medio.id]" title="Editar imagen" alt="Editar imagen">
                       <fa-icon class="icono-editar" [icon]="faEdit"></fa-icon>

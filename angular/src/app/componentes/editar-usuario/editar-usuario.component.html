@@ -1,0 +1,76 @@
+<!-- Contenedor -->
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+    <div  class="col-md-6">
+        <!-- Título de la página -->
+        <h1>{{ page_title }}</h1>
+    
+        <p *ngIf="estado != 'éxito'">Modifica los datos de usuario</p>
+        <hr/>
+    
+        <!-- Alerta que se mostrará si la actualización se ha realizado correctamente -->
+        <div class="alert alert-success" *ngIf="estado == 'éxito'">
+            El usuario se ha actualizado con éxito.
+        </div>
+        <!-- Alerta que se mostrará si no se ha completado la actualización -->
+        <div class="alert alert-danger" *ngIf="estado == 'error'">
+            {{mensajeError}}.
+        </div>
+    
+        <!-- Formulario de ajustes de usuario -->
+        <!-- Cuando el formulario se envíe llamará al método onSubmit enciandole el formulario -->
+        <form action="" class="col-md-12 ml-0 p-0" #miPerfilForm="ngForm" (ngSubmit)="onSubmit(miPerfilForm)">
+            <div class="form-group"> 
+                <label for="usuario">Nombre de usuario</label>
+                <!-- [(ngModel)] a la vez modifica en la clase del componente y viceversa -->
+                <input type="text" name="usuario" class="form-control" #nombreUsuario="ngModel" [(ngModel)]="usuario.usuario" required pattern="[0-9a-zA-Z]+" >
+                <!-- Mensaje de error en caso de que la validación no sea correcta -->
+                <small *ngIf="!nombreUsuario.valid && nombreUsuario.touched" class="invalid-feedback d-block">
+                    El nombre de usuario no es válido
+                </small>
+            </div>
+            <div class="form-group"> 
+                <label for="nombre">Nombre</label>
+                <input type="text" name="nombre" class="form-control" required #nombre="ngModel" [(ngModel)]="usuario.nombre" pattern="[A-Za-zÁ-ÿ ]+">
+                <small *ngIf="!nombre.valid && nombre.touched" class="invalid-feedback d-block">
+                    El nombre no es válido
+                </small>
+            </div>
+            <div class="form-group"> 
+                <label for="usuario">Apellidos</label>
+                <input type="text" name="apellidos" class="form-control" #apellidos="ngModel" [(ngModel)]="usuario.apellidos" required pattern="[A-Za-zÁ-ÿ ]+">
+                <small *ngIf="!apellidos.valid && apellidos.touched" class="invalid-feedback d-block">
+                    Los apellidos no son válidos
+                </small>
+            </div>
+            <div class="form-group"> 
+                <label for="usuario">Email</label>
+                <input type="email" name="email" class="form-control" #email="ngModel" [(ngModel)]="usuario.email"required pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$">
+                <small *ngIf="!email.valid && email.touched" class="invalid-feedback d-block">
+                    El email no es válido
+                </small>
+            </div>
+            <div class="form-group">
+                <label for="perfil_id">Perfil</label>
+                <select name="perfil_id" #perfil="ngModel" [(ngModel)]="usuario.perfil_id" class="form-control">
+                    <option *ngFor="let perfil of perfiles" value="{{perfil.id}}">
+                        {{perfil.nombre}}
+                    </option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="imagen">Imagen</label>
+                <div *ngIf="identidad && identidad.imagen">
+                    <img src="{{url + 'usuario/imagen/' + usuario.imagen}}" alt="" class="avatar_perfil">
+                </div>
+                <!-- Selector del módulo angular-file-uploader -->
+                <angular-file-uploader
+                    [config]="afuConfig" 
+                    (ApiResponse)="subirImagen($event)">
+                </angular-file-uploader>
+            </div>
+    
+            <!-- Botón para enviar el formulario. Deshabilitado si el formulario no está validado -->
+            <input type="submit" value="Guardar cambios" class="btn btn-success" [disabled]="miPerfilForm.invalid"/>
+        </form>
+    </div> </div>
+    <!-- FIN Contenedor -->

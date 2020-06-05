@@ -33,6 +33,14 @@ import { EntradaUnicaComponent } from './componentes/entrada-unica/entrada-unica
 import { CategoriaComponent } from './componentes/categoria/categoria.component';
 import { ContactoComponent } from './componentes/contacto/contacto.component';
 import { ContactosComponent } from './componentes/contactos/contactos.component';
+import { AdminUsuariosComponent } from './componentes/admin-usuarios/admin-usuarios.component';
+import { EditarUsuarioComponent } from './componentes/editar-usuario/editar-usuario.component';
+
+//Importo los Guard para el control de acceso restringido a las páginas
+import { AdminGuard } from './servicios/admin.guard';
+import { EditorGuard } from './servicios/editor.guard';
+import { InvitadoGuard } from './servicios/invitado.guard';
+import { UsuarioService } from './servicios/usuario.service';
 
 //Declaro los módulos que voy a utilizar
 @NgModule({
@@ -55,7 +63,9 @@ import { ContactosComponent } from './componentes/contactos/contactos.component'
     EntradaUnicaComponent,
     CategoriaComponent,
     ContactoComponent,
-    ContactosComponent
+    ContactosComponent,
+    AdminUsuariosComponent,
+    EditarUsuarioComponent
   ],
   imports: [
     BrowserModule,
@@ -69,7 +79,11 @@ import { ContactosComponent } from './componentes/contactos/contactos.component'
     NgbModule
   ],
   providers: [
-    appRoutingProviders
+    appRoutingProviders,
+    AdminGuard,
+    EditorGuard,
+    InvitadoGuard,
+    UsuarioService
   ],
   bootstrap: [AppComponent]
 })

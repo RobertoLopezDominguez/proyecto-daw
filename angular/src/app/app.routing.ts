@@ -6,7 +6,6 @@ import { Routes, RouterModule } from '@angular/router';
 import { LoginComponent } from './componentes/login/login.component';
 import { RegistroComponent } from './componentes/registro/registro.component';
 import { InicioComponent } from './componentes/inicio/inicio.component';
-import { AdminComponent } from './componentes/admin/admin.component';
 import { ErrorComponent } from './componentes/error/error.component';
 import { PerfilUsuarioComponent } from './componentes/perfil-usuario/perfil-usuario.component';
 import { CategoriasComponent } from './componentes/categorias/categorias.component';
@@ -19,26 +18,34 @@ import { EntradaUnicaComponent } from './componentes/entrada-unica/entrada-unica
 import { CategoriaComponent } from './componentes/categoria/categoria.component';
 import { ContactoComponent } from './componentes/contacto/contacto.component';
 import { ContactosComponent } from './componentes/contactos/contactos.component';
+import { AdminUsuariosComponent } from './componentes/admin-usuarios/admin-usuarios.component';
+import { EditarUsuarioComponent } from './componentes/editar-usuario/editar-usuario.component';
+
+//Importo los Guard para el control de acceso restringido a las páginas
+import { AdminGuard } from './servicios/admin.guard';
+import { EditorGuard } from './servicios/editor.guard';
+import { InvitadoGuard } from './servicios/invitado.guard';
 
 //Definir las rutas
 const appRoutes: Routes = [
     {path: '', component: LoginComponent},
     {path: 'inicio', component: InicioComponent},
     {path: 'login', component: LoginComponent},
-    {path: 'logout/:cerrar', component: LoginComponent},
+    {path: 'logout/:cerrar', component: LoginComponent, canActivate: [InvitadoGuard]},
     {path: 'registro', component: RegistroComponent},
-    {path: 'admin', component: AdminComponent},
-    {path: 'mi-perfil', component: PerfilUsuarioComponent},
-    {path: 'categorias', component: CategoriasComponent},
-    {path: 'nueva-entrada', component: NuevaEntradaComponent},
-    {path: 'entradas', component: EntradasComponent},
-    {path: 'editar-entrada/:id', component: EditarEntradaComponent},
-    {path: 'editar-medio/:id', component: EditarMedioComponent},
-    {path: 'medios', component: MediosComponent},
+    {path: 'mi-perfil', component: PerfilUsuarioComponent, canActivate: [InvitadoGuard]},
+    {path: 'categorias', component: CategoriasComponent, canActivate: [EditorGuard]},
+    {path: 'nueva-entrada', component: NuevaEntradaComponent, canActivate: [EditorGuard]},
+    {path: 'entradas', component: EntradasComponent, canActivate: [EditorGuard]},
+    {path: 'editar-entrada/:id', component: EditarEntradaComponent, canActivate: [EditorGuard]},
+    {path: 'editar-medio/:id', component: EditarMedioComponent, canActivate: [EditorGuard]},
+    {path: 'medios', component: MediosComponent, canActivate: [EditorGuard]},
     {path: 'entrada/:id', component: EntradaUnicaComponent},
     {path: 'categoria/:id', component: CategoriaComponent},
     {path: 'contacto', component: ContactoComponent},
-    {path: 'contactos', component: ContactosComponent},
+    {path: 'contactos', component: ContactosComponent, canActivate: [AdminGuard]},
+    {path: 'admin-usuarios', component: AdminUsuariosComponent, canActivate: [AdminGuard]},
+    {path: 'editar-usuario/:id', component: EditarUsuarioComponent, canActivate: [AdminGuard]},
     {path: '**', component: ErrorComponent}
 ]; // ** siempre al final
 

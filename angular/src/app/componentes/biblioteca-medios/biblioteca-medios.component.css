@@ -23,3 +23,8 @@
     color: red;
     text-align: center;
 }
+
+.col-archivo{
+    max-width: 300px;
+    overflow: hidden;
+}

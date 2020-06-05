@@ -1,0 +1,52 @@
+<!-- Contenedor -->
+<div class="col-md-12 mt-5 d-flex justify-content-center">
+    <div  class="col-md-12">
+        <!-- Título de la página -->
+        <h1>{{ page_title }}</h1>
+    
+        <p>Listado de usuarios</p>
+
+        <!-- Tabla con la lista de usuarios -->
+        <table class="table table-striped tabla-usuarios">
+        <thead class="thead-dark">
+            <tr>
+            <th scope="col">#</th>
+            <th scope="col">Usuario</th>
+            <th scope="col">Nombre y apellidos</th>
+            <th scope="col">Email</th>
+            <th scope="col">Perfil</th>
+            <th scope="col">Estado</th>
+            <th scope="col">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let usuario of usuarios">
+                <tr>
+            <th scope="row">{{usuario.id}}</th>
+            <td>{{usuario.usuario}}</td>
+            <td>{{usuario.nombre}} {{usuario.apellidos}}</td>
+            <td>{{usuario.email}}</td>
+            <td>{{usuario.perfil}}</td>
+            <td>{{usuario.estado}}</td>
+            <td>   
+                <span [routerLink]="['/editar-usuario/', usuario.id]" title="Editar usuario">
+                    <fa-icon class="btn-acciones text-success" [icon]="faEdit"></fa-icon>
+                </span>
+                <span *ngIf="usuario.estado == 'Activo'" title="Desactivar usuario" (click)="cambiaEstado(usuario)">
+                    <fa-icon class="btn-acciones text-secondary" [icon]="faTimesCircle"></fa-icon>
+                </span>
+                <span *ngIf="usuario.estado == 'Desactivado'" title="Activar usuario" (click)="cambiaEstado(usuario)">
+                    <fa-icon class="btn-acciones text-primary" [icon]="faPlayCircle"></fa-icon>
+                </span>
+                <span  title="Eliminar mensaje" (click)="eliminar(usuario.id)">
+                    <fa-icon class="btn-acciones text-danger" [icon]="faTrashAlt"></fa-icon>
+                </span>
+            </td>
+        </tr>
+            </ng-container>
+        </tbody>
+        </table>
+
+    </div> 
+</div>
+<!-- FIN Contenedor -->

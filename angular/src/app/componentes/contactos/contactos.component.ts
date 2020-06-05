@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ContactoService } from '../../servicios/contacto.service';
-
 import { UsuarioService } from '../../servicios/usuario.service';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { Contacto } from '../../modelos/contacto';

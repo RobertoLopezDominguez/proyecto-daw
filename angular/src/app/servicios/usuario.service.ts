@@ -92,6 +92,8 @@ export class UsuarioService{
 
         //Elimino el parámetro de la password que no quiero actualizar
         delete usuario_actualizado.password;
+        delete usuario_actualizado.created_at;
+        delete usuario_actualizado.updated_at;
 
         //Convierto los datos del usuario de un objeto a JSON
         let json = JSON.stringify(usuario_actualizado);
@@ -146,5 +148,33 @@ export class UsuarioService{
         return this.token;
     }
 
+    /**
+     * Método que devuelve todos los usuarios
+     */
+    getUsuarios(token): Observable<any>{
+        //Cabeceras HTTP. Envío además el token.
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+        .set('Authorization', token);
 
+        //Devuelvo la petición AJAX para obtener todos los usuarios
+        return this._http.get(this.url+'usuarios', {headers: headers});
+    }
+
+    getUsuarioById(token,id):Observable<any>{
+        //Cabeceras HTTP. Envío además el token.
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+        .set('Authorization', token);
+
+        //Devuelvo la petición AJAX para obtener todos los usuarios
+        return this._http.get(this.url+'usuario/' + id, {headers: headers});
+    }
+
+    eliminar(token, id): Observable<any>{
+        //Cabeceras HTTP. Envío además el token.
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+        .set('Authorization', token);
+
+        //Devuelvo la petición AJAX para eliminar el usuario
+        return this._http.delete(this.url+'usuario/' + id, {headers: headers});
+    }
 }

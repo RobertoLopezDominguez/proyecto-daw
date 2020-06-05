@@ -54,19 +54,23 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
     this.url = global.url;
    }
 
+  //Se ejecuta al inicio del componente
   ngOnInit(): void {
-        //Limpio el localStorage para asegurarme de que no hay ninguna imagen almacenada
-        this._medioService.clearImagen();
-    this.getCategorias();
+    //Limpio el localStorage para asegurarme de que no hay ninguna imagen almacenada
+    this._medioService.clearImagen();
+
     //Creo un objeto de tipo Entrada para ir rellenándolo
     this.entrada = new Entrada(1,this.identidad.id,1,'Borrador','','',null,this.etiquetas);
-    this.medio = new Medio(
-      1, '', '', '', 'Publicada', '', '', '', '',null
-    );
+    this.medio = new Medio( 1, '', '', '', 'Publicada', '', '', '', '',null);
 
+    //Recupero la entrada
     this.getEntrada();
+
+    //Recupero las categorías
+    this.getCategorias();
   }
 
+  //Compuebo periódicamente el estado de la imagen
   ngDoCheck(){
     this.compruebaImagen();
   }
@@ -89,6 +93,7 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
     );
   }
 
+  //Recupera la entrada para la edicón
   getEntrada(){
     //Recupero el Id de la entrada de la URL
     this._route.params.subscribe(
@@ -99,11 +104,12 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
         this._entradaService.getEntrada(id).subscribe(
           response => {
             if(response.estado == 'éxito'){
+              //Recupero la entrada
               this.entrada = response.entrada;
-
+              //Recupero las etiquetas
               this.etiquetas = this.entrada.etiquetas;
-              console.log(this.entrada);
-              console.log(this.etiquetas);
+              //Almaceno la imagen seleccionada
+              this._medioService.setMedioSeleccionado(response.imagen_id);
             }
           },
           error => { 
@@ -115,7 +121,6 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
   }
 
   onSubmit(form){
-
     //Guardo el post en la base de datos
     this._entradaService.editar(this.token, this.entrada, this.entrada.id).subscribe(
       response => {
@@ -159,15 +164,18 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
     this.etiquetas.splice(indice,1);
   }
 
+  //Cambia la visibilidad del componente de Medios
   toggleMedios(){
     this.mediosVisible = !this.mediosVisible;
   }
 
+  //Elimina la imagen seleccionada
   eliminaImagen(){
     this.entrada.imagen_id = null;
     this._medioService.clearImagen();
   }
 
+  //Cambia el estado de la entrada
   cambiaEstado(){
     if(this.entrada.estado == 'Borrador'){
       this.entrada.estado = 'Publicada';
@@ -176,9 +184,17 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
     }
   }
 
+  //Comprueba si hay una imagen seleccionda
   compruebaImagen(){
-    this.entrada.imagen_id = this._medioService.getMedioSeleccionado();
+    //Compruebo si hay una imagen seleccionada para la edición
+    if(this._medioService.getMedioSeleccionado() != "undefined"){
+      //En ese caso la asigno al objeto entrada
+      this.entrada.imagen_id = this._medioService.getMedioSeleccionado();
+    }
+    
+    //Si el objeto tiene una imagen asociada
     if(this.entrada.imagen_id != null){
+      //Recupero la imagen para mostrarla
       this._medioService.getMedioById(this.entrada.imagen_id).subscribe(
         response => {
           if(response.estado == 'éxito'){

@@ -13,7 +13,7 @@ class PerfilController extends Controller
 
         //Añado el middleware de autenticación a todos los métodos salvo las excepciones
         $this->middleware('api.auth', [
-            'except' => ['mostrar', 'listarTodos']
+            'except' => ['listarTodos']
         ]);
     } 
 
