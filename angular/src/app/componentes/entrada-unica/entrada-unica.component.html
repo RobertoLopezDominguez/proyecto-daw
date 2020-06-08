@@ -20,8 +20,7 @@
             <fa-icon class="iconos-entrada" [icon]="faTags"></fa-icon>
             <span *ngFor="let etiqueta of entrada.etiquetas">{{etiqueta}}, </span>
         </div>
-
         <!-- Contenido -->
-        <div [innerHTML]="entrada.contenido"></div>
+        <div class="contenido" [innerHTML]="entrada.contenido"></div>
     </div>
 </div>

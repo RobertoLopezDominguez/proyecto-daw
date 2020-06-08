@@ -104,12 +104,14 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
         this._entradaService.getEntrada(id).subscribe(
           response => {
             if(response.estado == 'éxito'){
+              console.log(response);
               //Recupero la entrada
               this.entrada = response.entrada;
               //Recupero las etiquetas
               this.etiquetas = this.entrada.etiquetas;
               //Almaceno la imagen seleccionada
-              this._medioService.setMedioSeleccionado(response.imagen_id);
+              this._medioService.setMedioSeleccionado(response.entrada.imagen_id);
+              console.log(response.imagen_id);
             }
           },
           error => { 
@@ -187,23 +189,14 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
   //Comprueba si hay una imagen seleccionda
   compruebaImagen(){
     //Compruebo si hay una imagen seleccionada para la edición
-    if(this._medioService.getMedioSeleccionado() != "undefined"){
+    if(this._medioService.getMedioSeleccionado()['id'] != "undefined"){
       //En ese caso la asigno al objeto entrada
-      this.entrada.imagen_id = this._medioService.getMedioSeleccionado();
+      this.entrada.imagen_id = this._medioService.getMedioSeleccionado()['id'];
     }
     
     //Si el objeto tiene una imagen asociada
     if(this.entrada.imagen_id != null){
-      //Recupero la imagen para mostrarla
-      this._medioService.getMedioById(this.entrada.imagen_id).subscribe(
-        response => {
-          if(response.estado == 'éxito'){
-            this.medio.nombre = response.medio.nombre;
-          }
-        },
-        error => {
-        }
-      );
+      this.medio.nombre = this._medioService.getMedioSeleccionado()['nombre'];
     }
 }
 }

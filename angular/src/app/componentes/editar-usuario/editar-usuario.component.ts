@@ -75,17 +75,7 @@ export class EditarUsuarioComponent implements OnInit {
 
     //Cargo los datos del usuario en el objeto usuario
     //this.usuario = this.identidad;
-    this.usuario = new Usuario(
-      this.identidad.id,
-      this.identidad.usuario,
-      this.identidad.email,
-      this.identidad.perfil_id,
-      '',
-      this.identidad.estado,
-      this.identidad.nombre,
-      this.identidad.apellidos,
-      this.identidad.imagen
-    );
+    this.usuario = new Usuario(1,'','','','','','','','');
 
   }
 
@@ -110,10 +100,6 @@ export class EditarUsuarioComponent implements OnInit {
         console.log(response);
         if(response['estado'] == 'éxito'){
           this.estado = 'éxito';
-          
-          //Actualizo los cambios del usuario en la sesión
-          this.identidad = this.usuario;
-          localStorage.setItem('identidad', JSON.stringify(this.identidad));
         }else{
           this.estado = 'error';
         }

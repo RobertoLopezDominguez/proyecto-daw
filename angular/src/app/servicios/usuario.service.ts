@@ -91,7 +91,7 @@ export class UsuarioService{
         }
 
         //Elimino el parámetro de la password que no quiero actualizar
-        delete usuario_actualizado.password;
+        //delete usuario_actualizado.password;
         delete usuario_actualizado.created_at;
         delete usuario_actualizado.updated_at;
 

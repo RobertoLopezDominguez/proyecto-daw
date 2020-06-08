@@ -9,3 +9,18 @@
     object-fit: cover;
     width: 40px;
 }
+
+.footer{
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #A8AABC;
+    color: white;
+}
+
+.footer-parrafo {
+    margin-bottom: 4px;
+}
+
+.footer hr {
+    color: white;
+}

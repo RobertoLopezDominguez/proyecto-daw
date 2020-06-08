@@ -145,17 +145,9 @@ export class NuevaEntradaComponent implements OnInit, DoCheck {
   }
 
   compruebaImagen(){
-      this.entrada.imagen_id = this._medioService.getMedioSeleccionado();
+      this.entrada.imagen_id = this._medioService.getMedioSeleccionado()['id'];
       if(this.entrada.imagen_id != null){
-        this._medioService.getMedioById(this.entrada.imagen_id).subscribe(
-          response => {
-            if(response.estado == 'éxito'){
-              this.medio.nombre = response.medio.nombre;
-            }
-          },
-          error => {
-          }
-        );
+        this.medio.nombre = this._medioService.getMedioSeleccionado()['nombre'];
       }
   }
 

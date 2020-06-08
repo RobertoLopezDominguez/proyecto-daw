@@ -391,7 +391,7 @@ class UsuarioController extends Controller
         //Valido los datos
         $validar = \Validator::make($parametros_array, [
             'usuario'       => 'required',
-            'password'         => 'required'
+            'password'      => 'required'
         ]); 
 
         //Si la validación falla

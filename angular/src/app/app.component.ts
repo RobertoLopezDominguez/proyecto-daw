@@ -32,6 +32,7 @@ export class AppComponent implements OnInit, DoCheck{
 
   ngDoCheck(){
     this.cargarUsuario();
+    this.cargarCategorias();
   }
 
   cargarUsuario(){
@@ -40,12 +41,18 @@ export class AppComponent implements OnInit, DoCheck{
         this.token = this._usuarioService.getToken();
   }
 
+  cargarCategorias(){
+    //Recupero las categorías almecenadas
+    this.categorias = this._categoriaService.recuperarCategorias();
+  }
+
   getCategorias(){
-    this._categoriaService.getCategorias().subscribe(
+    this._categoriaService.getCategoriasNoVacias().subscribe(
       response => {
         if(response.estado == 'éxito'){
-          this.categorias = response.categorias;
-          //console.log(this.categorias);
+            this.categorias = response.categorias; 
+            //Almaceno las categorías en el localstorage
+            this._categoriaService.almacenarCategorias(this.categorias);
         }
       },
       error => {

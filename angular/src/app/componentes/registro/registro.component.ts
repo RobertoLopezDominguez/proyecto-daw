@@ -23,11 +23,11 @@ export class RegistroComponent implements OnInit {
     /**
      * Creo un objeto para el usuario vacío
      * 
-     * Por defecto el perfilId es 5 (Invitado)
+     * Por defecto el perfilId es 3 (Invitado)
      * y el estado 'Activo'
      */
     this.usuario = new Usuario(
-      1, '', '', '5', '', 'Activo', '', '', ''
+      1, '', '', '3', '', 'Activo', '', '', ''
     );
   }
 

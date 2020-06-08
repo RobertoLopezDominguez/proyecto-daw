@@ -31,7 +31,7 @@ const appRoutes: Routes = [
     {path: '', component: LoginComponent},
     {path: 'inicio', component: InicioComponent},
     {path: 'login', component: LoginComponent},
-    {path: 'logout/:cerrar', component: LoginComponent, canActivate: [InvitadoGuard]},
+    {path: 'logout/:cerrar', component: LoginComponent},
     {path: 'registro', component: RegistroComponent},
     {path: 'mi-perfil', component: PerfilUsuarioComponent, canActivate: [InvitadoGuard]},
     {path: 'categorias', component: CategoriasComponent, canActivate: [EditorGuard]},

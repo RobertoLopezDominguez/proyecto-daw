@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
   public page_title: string;
   public usuario: Usuario;
   public estado: string;
+  public mensajeError: string;
   public token;
   public identidad; //Datos del usuario autenticado
 
@@ -76,15 +77,17 @@ export class LoginComponent implements OnInit {
             },
             error => {
               this.estado = 'error';
+              this.mensajeError = error.mensaje;
             }
           );
         }else{
           this.estado = 'error';
+          this.mensajeError = response.mensaje;
         }
       },
       error => {
-        this.estado = 'error';
-        console.log(<any>error);
+        this.estado = 'error';        
+        this.mensajeError = error.mensaje;
       }
     );
   }

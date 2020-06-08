@@ -50,6 +50,7 @@ Route::delete('/api/perfil/{id}', 'PerfilController@borrar')->name('perfil.borra
 //Rutas Categorías
 Route::get('/api/categoria/{id}', 'CategoriaController@mostrar')->name('categoria.mostrar'); //Devolver una categoria por id
 Route::get('/api/categorias', 'CategoriaController@listarTodas')->name('categoria.listarTodas'); //Devolver todas las categorias
+Route::get('/api/categoriasnovacias', 'CategoriaController@listarTodasNoVacias')->name('categoria.listarTodasNoVacias'); //Devolver todas las categorias no vacías
 Route::post('/api/categoria', 'CategoriaController@crear')->name('categoria.crear'); //Crea una categoria nueva
 Route::put('/api/categoria', 'CategoriaController@actualizar')->name('categoria.actualizar'); //Actualiza una categoria
 Route::delete('/api/categoria/{id}', 'CategoriaController@borrar')->name('categoria.borrar'); //Borra una categoria

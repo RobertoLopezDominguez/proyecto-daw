@@ -35,6 +35,26 @@ export class CategoriaService{
         return this._http.get(this.url+'categorias', {headers: headers});
     }
 
+    getCategoriasNoVacias():Observable<any>{
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+        //Devuelvo la petición AJAX con las categorías no vacías (con alguna entrada publicada)
+        return this._http.get(this.url+'categoriasnovacias', {headers: headers});
+    }
+
+    almacenarCategorias(categorias){
+        //Limpio el ítem
+        localStorage.removeItem('categorias');
+        //Las guardo en el LocalStorage
+        localStorage.setItem('categorias', JSON.stringify(categorias));
+    }
+
+    recuperarCategorias(){
+        let categorias = localStorage.getItem('categorias');
+
+        return JSON.parse(categorias);
+    }
+
     eliminar(token, id):Observable<any>{
         //Cabeceras HTTP
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')

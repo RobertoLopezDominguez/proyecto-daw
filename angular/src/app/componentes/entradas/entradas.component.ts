@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { EntradaService } from '../../servicios/entrada.service';
+import { CategoriaService } from '../../servicios/categoria.service';
 import { faEdit, faTrashAlt, faTimesCircle, faPlayCircle, faTrashRestoreAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
 import { Entrada } from '../../modelos/entrada';
 import { global } from '../../servicios/global';
@@ -11,7 +12,7 @@ import { NgbNav} from '@ng-bootstrap/ng-bootstrap';
   selector: 'app-entradas',
   templateUrl: './entradas.component.html',
   styleUrls: ['./entradas.component.css'],
-  providers: [UsuarioService, EntradaService, NgbNav]
+  providers: [UsuarioService, EntradaService, CategoriaService, NgbNav]
 })
 export class EntradasComponent implements OnInit {
 
@@ -33,7 +34,8 @@ export class EntradasComponent implements OnInit {
     private _route: ActivatedRoute,
     private _router: Router,
     private _usuarioService: UsuarioService,
-    private _entradaService: EntradaService
+    private _entradaService: EntradaService,
+    private _categoriaService: CategoriaService
   ) {
     
    }
@@ -75,11 +77,27 @@ export class EntradasComponent implements OnInit {
     this._entradaService.editar(this.token, entradaAux, entrada.id).subscribe(
       response => {
         console.log(response);
+            //Actualizo las categorías almacenadas
+            this._categoriaService.getCategoriasNoVacias().subscribe(
+              response => {
+                if(response.estado == 'éxito'){
+                    let categorias = response.categorias; 
+                    console.log(response.categorias);
+                    //Almaceno las categorías en el localstorage
+                    this._categoriaService.almacenarCategorias(categorias);
+                }
+              },
+              error => {
+                console.log(error);
+              }
+            );
       },
       error => {
         console.log(error);
       }
     );
+
+
   }
 
   eliminarDefinitivamente(id){

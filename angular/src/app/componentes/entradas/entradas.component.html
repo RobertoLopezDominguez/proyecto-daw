@@ -25,7 +25,7 @@
                 </thead>
                 <tbody>
                   <ng-container *ngFor="let entrada of entradas">
-                  <tr *ngIf="entrada.estado != 'Papelera'">
+                  <tr *ngIf="entrada.estado != 'Papelera' && (identidad.perfil == 'Administrador' || entrada.usuario_id == identidad.id) ">
                     <th scope="row">{{entrada.id}}</th>
                     <td>{{entrada.titulo}}</td>
                     <td>{{entrada.nombre}} {{entrada.apellidos}}</td>
@@ -78,7 +78,7 @@
                 </thead>
                 <tbody>
                   <ng-container *ngFor="let entrada of entradas">
-                    <tr *ngIf="entrada.estado == 'Papelera'">
+                    <tr *ngIf="entrada.estado == 'Papelera' && (identidad.perfil == 'Administrador' || entrada.usuario_id == identidad.id)">
                     <th scope="row">{{entrada.id}}</th>
                     <td>{{entrada.titulo}}</td>
                     <td>{{entrada.nombre}} {{entrada.apellidos}}</td>

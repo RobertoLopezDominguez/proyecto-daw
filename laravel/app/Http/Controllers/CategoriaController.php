@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Categoria;
+use DB;
 
 class CategoriaController extends Controller
 {
@@ -13,7 +14,7 @@ class CategoriaController extends Controller
 
         //Añado el middleware de autenticación a todos los métodos salvo las excepciones
         $this->middleware('api.auth', [
-            'except' => ['mostrar', 'listarTodas']
+            'except' => ['mostrar', 'listarTodas', 'listarTodasNoVacias']
         ]);
     } 
 
@@ -129,17 +130,53 @@ class CategoriaController extends Controller
     public function listarTodas(){
 
         //Recuperamos todas las categorías
-        $categoria = Categoria::all();  
+        $categorias = Categoria::all();  
 
         //Si la respuesta es un objeto es que se ha encontrado
-        if(is_object($categoria)){
+        if(is_object($categorias)){
 
             //Devuelvo un códido de éxito y las categorias
             $respuesta = array(
                 'estado' => 'éxito',
                 'codigo' => 200,
                 'mensaje' => 'Categorías encontradas.',
-                'categorias' => $categoria
+                'categorias' => $categorias
+            );
+        }else{  //Si no se ha encontrado devuelvo una respuesta de error
+            $respuesta = array(
+                'estado' => 'error',
+                'codigo' => 404,
+                'mensaje' => 'Las categorías no se han encontrado.'
+            );
+        }
+
+        //Devuelvo la respuesta con el código de la misma
+        return response()->json($respuesta, $respuesta['codigo']);
+    }
+
+    /**
+     * Función que lista todas las categorías no vacías
+     * (Con alguna entrada publicada)
+     * 
+     * No recibe ningún parámetro
+     * 
+     * Método HTTP: GET
+     * Ruta: /api/categoriasnovacias
+     */
+    public function listarTodasNoVacias(){
+
+        //Recuperamos todas las categorías no vacías (con alguna entrada publicada)
+        $categorias = DB::select("SELECT DISTINCT categorias.* FROM categorias, entradas WHERE categorias.id = entradas.categoria_id AND entradas.estado = 'Publicada';", [1]);
+
+        //Si la respuesta es un objeto es que se ha encontrado
+        if(isset($categorias) && $categorias != null){
+
+            //Devuelvo un códido de éxito y las categorias
+            $respuesta = array(
+                'estado' => 'éxito',
+                'codigo' => 200,
+                'mensaje' => 'Categorías encontradas.',
+                'categorias' => $categorias
             );
         }else{  //Si no se ha encontrado devuelvo una respuesta de error
             $respuesta = array(

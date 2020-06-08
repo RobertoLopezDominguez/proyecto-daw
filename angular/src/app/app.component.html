@@ -58,7 +58,7 @@
           </li>
         </ul>
         <ul class="navbar-nav navbar-right" *ngIf="identidad && identidad.nombre"> <!-- Se muestra si un usuario está logueado -->
-          <li class="nav-item dropdown" *ngIf="identidad.nivel_acceso <=100">
+          <li class="nav-item dropdown" *ngIf="identidad.nivel_acceso <= 100">
             <a
               class="nav-link dropdown-toggle"
               href="#"
@@ -109,5 +109,13 @@
     <!-- FIN BARRA NAVEGACIÓN -->
     <!-- CONTENIDO -->
     <router-outlet></router-outlet>
+    <footer class="footer">
+      <div>
+        <p class="footer-parrafo">PROYECTO DAW</p>
+        <hr/>
+        <p class="footer-parrafo">Back-end realizado en una SPA con Laravel y Angular</p>
+        <p class="footer-parrafo">Por ROBERTO LÓPEZ DOMÍNGUEZ (2020)</p>
+      </div>
+    </footer>
   </div>
   <!-- FIN CONTENEDOR PRINCIPAL -->

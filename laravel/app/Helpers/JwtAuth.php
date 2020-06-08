@@ -30,8 +30,8 @@ class JwtAuth{
         //Compruebo si las credenciales son correctas
         $signup = false; //Por defecto la autenticación es falsa
 
-        //Si el usuario se ha encontrado la autenticación es correcta
-        if(\is_object($usuario)) $signup = true;
+        //Si el usuario se ha encontrado y está activo la autenticación es correcta
+        if(\is_object($usuario) && $usuario->estado == 'Activo') $signup = true;
 
         //Genero un token para el usuario identificado
         if($signup){ //Solo si se ha encontrado el usuario
@@ -65,11 +65,21 @@ class JwtAuth{
             }
 
         }else{
-            $respuesta = array(
-                'estado' => 'error',
-                'codigo' => 400,
-                'mensaje' => 'Login incorrecto.'
-            );
+
+            if(\is_object($usuario) && $usuario->estado == "Desactivado"){
+                $respuesta = array(
+                    'estado' => 'error',
+                    'codigo' => 400,
+                    'mensaje' => 'El usuario está desactivado.'
+                );
+            }else{
+                $respuesta = array(
+                    'estado' => 'error',
+                    'codigo' => 400,
+                    'mensaje' => 'Login incorrecto.'
+                );
+            }
+            
         }
 
         //Devuelvo la respuesta con el código de la misma

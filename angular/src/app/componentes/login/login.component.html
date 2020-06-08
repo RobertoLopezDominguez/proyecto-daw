@@ -3,6 +3,11 @@
     <div  class="col-md-6">
         <!-- Título de la página -->
         <h1>{{ page_title }}</h1>
+
+        <!-- Alerta que se mostrará si no se ha completado el login -->
+        <div class="alert alert-danger" *ngIf="estado == 'error'">
+            {{mensajeError}}
+        </div>
     
         <!-- Formulario de login -->
         <!-- Cuando el formulario se envíe llamará al método onSubmit enciandole el formulario -->

@@ -104,15 +104,38 @@ export class MedioService{
     }
 
     setMedioSeleccionado(id){
+        console.log(id);
+        //Almaceno la ID de la imagen
         localStorage.setItem('medioSeleccionadoID', id);
+
+        //Recupero el nombre de la imagen seleccionada
+        this.getMedioById(id).subscribe(
+            response => {
+                console.log(response);
+                if(response.estado == 'éxito'){
+                    console.log(response.medio.nombre);
+                    localStorage.setItem('medioSeleccionadoNombre', response.medio.nombre);
+                }
+            },
+            error => {
+                console.log(error);
+            }
+        );
+        
     }
 
     getMedioSeleccionado(){
-        return localStorage.getItem('medioSeleccionadoID');
+        let medioSeleccionado = [];
+
+        medioSeleccionado['id'] = localStorage.getItem('medioSeleccionadoID');
+        medioSeleccionado['nombre'] = localStorage.getItem('medioSeleccionadoNombre');
+        
+        return medioSeleccionado;
     }
 
     clearImagen(){
         localStorage.removeItem('medioSeleccionadoID');
+        localStorage.removeItem('medioSeleccionadoNombre');
     }
 
 }
