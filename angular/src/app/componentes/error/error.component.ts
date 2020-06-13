@@ -1,3 +1,6 @@
+/**
+ * Componente para la página de error 404
+ */
 import { Component, OnInit } from '@angular/core';
 
 @Component({

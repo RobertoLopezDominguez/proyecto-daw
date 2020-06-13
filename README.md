@@ -43,6 +43,10 @@ INSTRUCCIONES PARA EL CORRECTO FUNCIONAMIENTO EN DESARROLLO
    ser accesible. Angular dispone de un servidor web que complila 
    la aplicación.
    
+   Esto requiere tener instalado node.js y Angular-CLI
+   
+   npm install -g angular-cli
+   
    Desde el directorio raíz de Angular (/angular) se debe ejecutar
    el siguiente comando en una terminal:
    

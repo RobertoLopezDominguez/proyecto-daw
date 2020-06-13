@@ -4,6 +4,7 @@
         <!-- Título de la página -->
         <h1>{{ page_title }}</h1>
     
+        <!-- Se mostrará solo si el estado no ha cambiado a éxito -->
         <p *ngIf="estado != 'éxito'">Modifica los datos de usuario</p>
         <hr/>
     
@@ -63,7 +64,6 @@
             </div>
             <div class="form-group">
                 <label for="imagen">Imagen</label>
-            <!--    <div *ngIf="identidad && identidad.imagen"> -->
                 <div >
                     <img src="{{url + 'usuario/imagen/' + usuario.imagen}}" alt="" class="avatar_perfil">
                 </div>

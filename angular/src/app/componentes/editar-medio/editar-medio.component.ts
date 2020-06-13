@@ -1,3 +1,6 @@
+/**
+ * Componente para editar un medio existente
+ */
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Medio } from '../../modelos/medio';
@@ -18,7 +21,7 @@ export class EditarMedioComponent implements OnInit {
   public token;
   public url;
   public estado;
-  public afuConfig;
+  public mensaje;
 
   constructor(
     private _route: ActivatedRoute,
@@ -35,6 +38,7 @@ export class EditarMedioComponent implements OnInit {
     );
   }
 
+  //Al iniciar el componente
   ngOnInit(): void {
     //Cargo la identidad y el token del usuario logueado
     this.identidad = this._usuarioService.getIdentidad();
@@ -47,16 +51,28 @@ export class EditarMedioComponent implements OnInit {
     this.url = global.url;
   }
 
-  onSubmit(imagen){
-
+  //Método que se ejecuta al enviar el formulario
+  onSubmit(form){
+    //Actualizo el medio
+    this._medioService.actualizar(this.token, this.medio).subscribe(
+      response => {
+        if(response.estado = 'éxito'){
+          this.estado = 'éxito';
+          this.mensaje = response.mensaje;
+        }
+      },
+      error => {
+        this.estado = 'error';
+      }
+    );
   }
 
-  subirImagen(evento){}
 
-
-  
+  /**
+   * Método que recupera el medio seleccionado
+   */
   getMedio(){
-    //Recupero el Id del post de la URL
+    //Recupero el Id del medio de la URL
     this._route.params.subscribe(
       params => {
         let id = params['id'];
@@ -66,11 +82,11 @@ export class EditarMedioComponent implements OnInit {
           response => {
             if(response.estado == 'éxito'){
               this.medio = response.medio;
-              console.log(this.medio);
             }
           },
           error => { 
             console.log(error);
+            //Si hay un error redirijo a Inicio
             this._router.navigate(['/inicio']);
           }
         );

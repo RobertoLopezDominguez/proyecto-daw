@@ -16,13 +16,16 @@
             </tr>
           </thead>
           <tbody>
-
+            <!-- Recorro todas las categorías para listarlas -->
               <tr *ngFor="let c of categorias">
                 <th scope="row">{{c.id}}</th>
                 <td>
+                  <!-- Muestro la categoría si no se está editando -->
                   <span *ngIf="c.id != editar_id">{{c.nombre}}</span>
+                  <!-- Si la categoría se está editando muestro este input ligado a editar_nombre -->
                   <input type="text" #editarCategoria="ngModel" [(ngModel)]="editar_nombre" *ngIf="c.id == editar_id">
                 </td>
+                <!-- Si no se está editando muestro los botones de acción -->
                 <td *ngIf="editar_id != c.id">
                   <span title="Editar categoría" (click)="editar(c.id)">
                     <fa-icon class="btn-acciones text-success" [icon]="faEdit"></fa-icon>
@@ -31,17 +34,15 @@
                     <fa-icon class="btn-acciones text-danger" [icon]="faTrashAlt"></fa-icon>
                   </span>
                 </td>
+                <!-- Si se está editando muestro el botón para guardar los cambios -->
                 <td *ngIf="editar_id == c.id">
                   <button class="btn btn-success" (click)="guardarCambios(c)">Actualizar</button>
-
-                </td>
-                            
+                </td>      
               </tr>
-
           </tbody>
         </table>
       </div>
-
+      
       <div class="col-md-6 float-right">
         <p>Crea una nueva categoría</p>
         <hr/>

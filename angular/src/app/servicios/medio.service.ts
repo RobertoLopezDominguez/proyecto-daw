@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Medio } from '../modelos/medio';
 import { global } from './global';
 
 //Clase del servicio para Medio
 @Injectable()
 export class MedioService{
+
     public url: string;
     public identidad;
     public token;
@@ -43,6 +43,7 @@ export class MedioService{
 
     //Lista todos los medios
     getMedios():Observable<any>{
+        //Cabeceras HTTP
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
         //Devuelvo la petición AJAX con todos los medios
@@ -51,12 +52,14 @@ export class MedioService{
 
     //Lista un medio por ID
     getMedioById(id):Observable<any>{
+        //Cabeceras HTTP
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
         //Devuelvo la petición AJAX con el medio
         return this._http.get(this.url+'medio/id/' + id, {headers: headers});
     }
 
+    //Elimina un medio por ID
     borraMedio(token, id):Observable<any>{
     //Cabeceras HTTP. Envío además el token.
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
@@ -103,17 +106,20 @@ export class MedioService{
         return this.token;
     }
 
+    /**
+     * Método que guarda el medio seleccionado en el localStorage
+     * Recibe la ID del medio
+     */
     setMedioSeleccionado(id){
-        console.log(id);
+
         //Almaceno la ID de la imagen
         localStorage.setItem('medioSeleccionadoID', id);
 
         //Recupero el nombre de la imagen seleccionada
         this.getMedioById(id).subscribe(
             response => {
-                console.log(response);
                 if(response.estado == 'éxito'){
-                    console.log(response.medio.nombre);
+                    //Almaceno el nombre del medio en el localStorage
                     localStorage.setItem('medioSeleccionadoNombre', response.medio.nombre);
                 }
             },
@@ -121,19 +127,26 @@ export class MedioService{
                 console.log(error);
             }
         );
-        
     }
 
+    /**
+     * Método que recupera el medio seleccionado del localStorage
+     */
     getMedioSeleccionado(){
+        //Creo un array para almacenarlo
         let medioSeleccionado = [];
 
+        //Recupero el id y el nombre del medio del localStorage
         medioSeleccionado['id'] = localStorage.getItem('medioSeleccionadoID');
         medioSeleccionado['nombre'] = localStorage.getItem('medioSeleccionadoNombre');
         
+        //Devuelvo el array
         return medioSeleccionado;
     }
 
+    //Método que elimina el medio guardado en el localStorage
     clearImagen(){
+        //Elimino las claves del localStorage
         localStorage.removeItem('medioSeleccionadoID');
         localStorage.removeItem('medioSeleccionadoNombre');
     }

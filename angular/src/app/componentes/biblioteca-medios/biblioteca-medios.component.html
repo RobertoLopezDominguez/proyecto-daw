@@ -1,6 +1,7 @@
 <!-- Contenedor -->
 <div class="col-md-12 p-0 d-flex justify-content-center">
     <div  class="col-md-12 p-0">
+      <!-- Si hay un error se mostrará el mensaje correspondiente -->
       <div *ngIf="error != null" class="mensaje-error justify-content-center">
         <span>{{error}}</span>
       </div>
@@ -16,12 +17,16 @@
                 <th scope="col">Descripción</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Archivo</th>
+                <!-- Las acciones solo se muestran si estamos en la página /medios -->
+                <!-- no si estamos en una página de entradas -->
                 <th scope="col" *ngIf="rutaActual.url == '/medios'">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let medio of medios" (click)="seleccionaMedio(medio)">
+              <!-- Recorro todos los medios para listarlos -->
+              <tr *ngFor="let medio of medios" (click)="seleccionaMedio(medio)"> <!-- Al pinchar en un se selecciona para añadirlo a una entrada -->
                 <th scope="row">{{medio.id}}</th>
+                <!-- La imagen se recupera con la URL base y el nombe de cada medio-->
                 <td><img src="{{url + 'medio/' + medio.nombre}}" alt="" class="thumbnail_medio" (click)="seleccionaMedio(medio)"></td>
                 <td>{{medio.titulo}}</td>
                 <td>{{medio.texto_alt}}</td>
@@ -29,6 +34,7 @@
                 <td>{{medio.descripcion}}</td>
                 <td>{{medio.estado}}</td>
                 <td class="col-archivo">{{medio.nombre}}</td>
+                <!-- Los botones de acción solo se muestran si estamos en la página de /medios -->
                 <td *ngIf="rutaActual.url == '/medios'">
                     <span [routerLink]="['/editar-medio/', medio.id]" title="Editar imagen" alt="Editar imagen">
                       <fa-icon class="icono-editar" [icon]="faEdit"></fa-icon>
@@ -41,7 +47,6 @@
               </tr>
             </tbody>
           </table>
-
     </div> 
 </div>
 <!-- FIN Contenedor -->

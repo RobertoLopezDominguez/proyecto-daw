@@ -1,3 +1,6 @@
+/**
+ * Componente que muestra la biblioteca de medios
+ */
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UsuarioService } from '../../servicios/usuario.service';
@@ -22,6 +25,7 @@ export class BibliotecaMediosComponent implements OnInit {
   public faTrashAlt = faTrashAlt;
   public error;
 
+  //Inyecto los servicios en el constructor
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -32,7 +36,7 @@ export class BibliotecaMediosComponent implements OnInit {
     this.identidad = this._usuarioService.getIdentidad();
     this.token = this._usuarioService.getToken();
 
-    //Ruta actual
+    //Ruta actual para comprobar en qué página estamos
     this.rutaActual = _router;
     console.log(this.rutaActual.url);
 
@@ -43,17 +47,19 @@ export class BibliotecaMediosComponent implements OnInit {
     this.getMedios();
 
     this.error = null;
-   }
-
-  ngOnInit(): void {
-
   }
 
+  ngOnInit(): void {  }
+
+  /**
+   * Método que recupera todos los medios
+   */
   getMedios(){
+    //Hago la petición al servicio de medios
     this._medioService.getMedios().subscribe(
       response => {
-        
         if(response.estado == 'éxito'){
+          //Si es correto asigno la respuesta al objeto medios
           this.medios = response.medios;
         }
       },
@@ -63,20 +69,29 @@ export class BibliotecaMediosComponent implements OnInit {
     );
   }
 
+  /**
+   * Método que guarda el medio seleccionado
+   * para asignalo a una entrada
+   */
   seleccionaMedio(medio){
     this._medioService.setMedioSeleccionado(medio.id);
   }
 
+  /**
+   * Método que borra un medio por ID
+   */
   borraMedio(id){
-    console.log(this.token);
+    //Llamo al método del servicio que borra un medio
     this._medioService.borraMedio(this.token, id).subscribe(
       response => {
         if(response['estado'] == 'éxito'){
+          //Si se ha borrado correctamente actualizo los medios
           this.getMedios();
           this.error = null;
         }
       },
       error => {
+        //Si hay un error le asigno el mensaje devuelto por el servidor
         this.error = error.error.mensaje;
       }
     );

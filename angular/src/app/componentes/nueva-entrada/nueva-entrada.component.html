@@ -34,25 +34,27 @@
                 <div class="form-group">
                     <label for="categoria_id">Categoría</label>
                     <select name="categoria_id" #categoria="ngModel" [(ngModel)]="entrada.categoria_id" class="form-control">
-                        <option *ngFor="let categoria of categorias" value="{{categoria.id}}">
+                        <!-- Recorro todas las categorías para mostrarlas en el select-->
+                        <option *ngFor="let categoria of categorias" value="{{categoria.id}}"> <!-- Se guarda el ID de cada categoría -->
                             {{categoria.nombre}}
                         </option>
                     </select>
                 </div>
             </div>
 
-            <!-- Imagen -->
+            <!-- Imagen. Se muestra si hay una imagen asociada a la entrada -->
             <div class="col-md-3 p-0 float-right" *ngIf="entrada.imagen_id != null">
                 <div class="form-group">
                     <label for="imagen">Imagen</label>
-                    <div class="btn-eliminar float-right" (click)="eliminaImagen()">
+                    <div class="btn-eliminar float-right" (click)="eliminaImagen()"> <!-- Botón que llama a la función para eliminar la imagen -->
                         <fa-icon [icon]="faMinusCircle"></fa-icon>
                     </div>
                     <img src="{{url + 'medio/' + medio.nombre}}" alt="" class="imagen">
                 </div>
             </div>
+            <!-- Botón para mostrar la biblioteca de medios -->
             <div class="col-md-3 p-0 float-right">
-                <div class="form-group">
+                <div class="form-group"> <!-- Al pinchar cambia el estado del botón. Muestra un mensaje según el estado de la imagen -->
                     <button class="btn btn-outline-success btn-sm btn-seleccionar-imagen" (click)="toggleMedios()" *ngIf="!mediosVisible && entrada.imagen_id == null">Selecciona una imagen</button>
                     <button class="btn btn-outline-secondary btn-sm btn-seleccionar-imagen" (click)="toggleMedios()" *ngIf="!mediosVisible && entrada.imagen_id != null">Cambiar imagen</button>
                     <button class="btn btn-outline-secondary btn-sm btn-seleccionar-imagen" (click)="toggleMedios()" *ngIf="mediosVisible">Cerrar biblioteca</button>
@@ -61,6 +63,7 @@
         </form>
 
         <!-- Etiquetas -->
+        <!-- Las etiquetas se añaden por medio de un formulario -->
         <form action="" #nuevaEtiqueta="ngForm" (ngSubmit)="addEtiqueta(nuevaEtiqueta)">
             <div class="col-md-3 p-0 float-right">
                 <div class="form-group d-block">
@@ -70,11 +73,15 @@
                         <input type="submit" value="+" class="btn btn-success float-right">
                     </div>
                 </div>
+                <!-- Contenedor para las etiquetas. Solo se muestra si las hay -->
                 <div class="marco-etiquetas" *ngIf="etiquetas.length != 0">
+                    <!-- Recorro todas las etiquetas para mostrarlas -->
                     <form *ngFor="let etiqueta of etiquetas; let indice=index" #etiquetaForm="ngForm" (ngSubmit)="borraEtiqueta($event)" >
                         <div class="etiqueta float-left">
                             <label for="{{etiqueta}}" class="m-1">{{etiqueta}}</label>
+                            <!-- Campo oculto donde almaceno el índice de la etiqueta en cuestión para poder borrarla -->
                             <input type="hidden" id="indice{{indice}}" name="indice" value="{{indice}}">
+                            <!-- Botón para borrar la etiqueta -->
                             <button type="submit" class="btn-eliminar">
                                <fa-icon [icon]="faMinusCircle"></fa-icon>
                             </button>
@@ -83,16 +90,15 @@
                 </div>
             </div>
         </form>
-
-
-
-        
     </div>
-    
 </div>
-    <div class="col-md-12" *ngIf="mediosVisible">
-        <app-medios></app-medios>
-    </div>
-
 <!-- FIN Contenedor -->
+
+<!-- Contenedor para mostrar la biblioteca de medio si esta está visible -->
+<div class="col-md-12" *ngIf="mediosVisible">
+    <!-- Llama al compoente medios -->
+    <app-medios></app-medios>
+</div>
+
+
 

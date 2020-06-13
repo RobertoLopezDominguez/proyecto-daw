@@ -1,3 +1,6 @@
+/**
+ * Componente para editar una entrada
+ */
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UsuarioService } from '../../servicios/usuario.service';
@@ -8,9 +11,8 @@ import { Entrada } from '../../modelos/entrada';
 import { Medio } from 'src/app/modelos/medio';
 import { global } from '../../servicios/global';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
-import { ThrowStmt } from '@angular/compiler';
  
-
+//Este componente usa la vista de nueva-entrada
 @Component({
   selector: 'app-editar-entrada',
   templateUrl: '../nueva-entrada/nueva-entrada.component.html',
@@ -48,11 +50,14 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
     private _medioService: MedioService
   ) {
     this.page_title = 'Editar entrada';
+
+    //Recupero la identidad y el token del usuario autenticado
     this.identidad = this._usuarioService.getIdentidad();
     this.token = this._usuarioService.getToken();
+
     //URL del API
     this.url = global.url;
-   }
+  }
 
   //Se ejecuta al inicio del componente
   ngOnInit(): void {
@@ -60,7 +65,7 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
     this._medioService.clearImagen();
 
     //Creo un objeto de tipo Entrada para ir rellenándolo
-    this.entrada = new Entrada(1,this.identidad.id,1,'Borrador','','',null,this.etiquetas);
+    this.entrada = new Entrada(1,null,1,'Borrador','','',null,this.etiquetas);
     this.medio = new Medio( 1, '', '', '', 'Publicada', '', '', '', '',null);
 
     //Recupero la entrada
@@ -104,14 +109,14 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
         this._entradaService.getEntrada(id).subscribe(
           response => {
             if(response.estado == 'éxito'){
-              console.log(response);
               //Recupero la entrada
               this.entrada = response.entrada;
+              //Compruebo si el usuario puede editar esta entrada, si no  puede redirijo a Inicio
+              if(!this.compruebaAcceso(this.entrada)) this._router.navigate(['/inicio']);
               //Recupero las etiquetas
               this.etiquetas = this.entrada.etiquetas;
               //Almaceno la imagen seleccionada
               this._medioService.setMedioSeleccionado(response.entrada.imagen_id);
-              console.log(response.imagen_id);
             }
           },
           error => { 
@@ -127,6 +132,7 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
     this._entradaService.editar(this.token, this.entrada, this.entrada.id).subscribe(
       response => {
         if(response.estado = 'éxito'){
+          //Actualizo la entrada
           this.getEntrada();
           this.estado = 'éxito';
         }else{
@@ -198,6 +204,22 @@ export class EditarEntradaComponent implements OnInit, DoCheck {
     if(this.entrada.imagen_id != null){
       this.medio.nombre = this._medioService.getMedioSeleccionado()['nombre'];
     }
-}
+  } 
+
+  //Comprueba si el usuario puede editar esta entrada
+  compruebaAcceso(entrada){
+    console.log(entrada);
+    //Compruebo si el usuario autenticado es administrador
+    if(this.identidad.perfil == 'Administador'){
+      return true;
+    }else{ //Si no es administrador
+      //Compruebo que sea el autor de la entrada
+      if(this.identidad.id == entrada.usuario_id){
+        return true;
+      }else{
+        return false;
+      }
+    }
+  }
 }
 

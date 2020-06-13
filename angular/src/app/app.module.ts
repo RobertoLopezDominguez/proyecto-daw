@@ -17,7 +17,6 @@ import { LoginComponent } from './componentes/login/login.component';
 import { RegistroComponent } from './componentes/registro/registro.component';
 import { InicioComponent } from './componentes/inicio/inicio.component';
 import { ErrorComponent } from './componentes/error/error.component';
-import { AdminComponent } from './componentes/admin/admin.component';
 import { PerfilUsuarioComponent } from './componentes/perfil-usuario/perfil-usuario.component';
 import { CategoriasComponent } from './componentes/categorias/categorias.component';
 import { NuevaEntradaComponent } from './componentes/nueva-entrada/nueva-entrada.component';
@@ -50,7 +49,6 @@ import { UsuarioService } from './servicios/usuario.service';
     RegistroComponent,
     InicioComponent,
     ErrorComponent,
-    AdminComponent,
     PerfilUsuarioComponent,
     CategoriasComponent,
     NuevaEntradaComponent,

@@ -1,3 +1,6 @@
+/**
+ * Componente para editar un usuario
+ */
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Usuario } from 'src/app/modelos/Usuario';
@@ -23,6 +26,7 @@ export class EditarUsuarioComponent implements OnInit {
   public mensajeError: string; 
   public url;
 
+  //Configuración para la subida de imágenes
   public afuConfig = {
       multiple: false,
       formatsAllowed: ".jpg, .png, jpeg, .gif",
@@ -59,11 +63,11 @@ export class EditarUsuarioComponent implements OnInit {
     /**
      * Creo un objeto para el usuario vacío
      * 
-     * Por defecto el perfilId es 5 (Invitado)
+     * Por defecto el perfilId es 3 (Invitado)
      * y el estado 'Activo'
      */
     this.usuario = new Usuario(
-      1, '', '', '5', '', 'Activo', '', '', ''
+      1, '', '', '3', '', 'Activo', '', '', ''
     );
 
     //Cargo la identidad y el token del usuario logueado
@@ -80,10 +84,12 @@ export class EditarUsuarioComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    //Al inicio del componente cargo el usuario y la lista de perfiles
     this.getUsuario();
     this.getPerfiles();
   }
 
+  //Método que se ejecuta al enviar el formulario
   onSubmit(form){
     //Creo una copia del objeto del usuario para enviarlo al actualizar
     let usuarioCopia = JSON.parse(JSON.stringify(this.usuario));
@@ -95,9 +101,9 @@ export class EditarUsuarioComponent implements OnInit {
       delete usuarioCopia.email;
     }
 
+    //Actualizo el usuario
     this._usuarioService.actualizar(this.token, usuarioCopia).subscribe(
       response => {
-        console.log(response);
         if(response['estado'] == 'éxito'){
           this.estado = 'éxito';
         }else{
@@ -112,8 +118,16 @@ export class EditarUsuarioComponent implements OnInit {
     );
   }
 
+  /**
+   * Método para subir una imagen.
+   * 
+   * Recibie el evento generado por Angular-File-Uploader.
+   * El cual sube la imagen al servidor según la configuración almacenada en afuConfig
+   */
   subirImagen(datos){
+    //Extaigo la respuesta
     let respuesta = JSON.parse(datos.response);
+    //Asigno el nombre de la imagen al usuario
     this.usuario.imagen = respuesta.imagen;
   }
 
@@ -129,8 +143,8 @@ export class EditarUsuarioComponent implements OnInit {
           response => {
             if(response.estado == "éxito"){
               this.usuario = response.usuario;
+              //Hago una copia del usuario para comprobqra luego si hay cambios
               this.usuarioOriginal = JSON.parse(JSON.stringify(this.usuario));
-              console.log(this.usuario);
             }
           },
           error => {
@@ -146,7 +160,6 @@ export class EditarUsuarioComponent implements OnInit {
       response => {
         if(response.estado == 'éxito'){
           this.perfiles = response.perfiles;
-          console.log(this.perfiles);
         }
       },
       error => {

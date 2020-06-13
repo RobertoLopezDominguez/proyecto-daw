@@ -27,8 +27,9 @@ import { EditorGuard } from './servicios/editor.guard';
 import { InvitadoGuard } from './servicios/invitado.guard';
 
 //Definir las rutas
+//Con canActivate indico que para acceder a esa ruta debe ser autorizado por el Guard
 const appRoutes: Routes = [
-    {path: '', component: LoginComponent},
+    {path: '', component: InicioComponent},
     {path: 'inicio', component: InicioComponent},
     {path: 'login', component: LoginComponent},
     {path: 'logout/:cerrar', component: LoginComponent},

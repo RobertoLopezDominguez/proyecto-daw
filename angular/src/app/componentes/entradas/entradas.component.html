@@ -6,8 +6,9 @@
     
         <p>Lista de entradas del blog</p>
 
+        <!-- Uso ngbNav de Bootstrap para Angular para las pestañas -->
         <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
-          <li [ngbNavItem]="1">
+          <li [ngbNavItem]="1"> <!-- Pestaña de entradas -->
             <a ngbNavLink>Entradas</a>
             <ng-template ngbNavContent>
               <!-- Tabla con la lista de entradas -->
@@ -24,17 +25,21 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <!-- Recorro todas las entradas para mostrarlas -->
                   <ng-container *ngFor="let entrada of entradas">
+                  <!-- En esta pestaña no muestro las de la papelera. Las muestro todas al administrador o solo las suyas al editor -->
                   <tr *ngIf="entrada.estado != 'Papelera' && (identidad.perfil == 'Administrador' || entrada.usuario_id == identidad.id) ">
                     <th scope="row">{{entrada.id}}</th>
                     <td>{{entrada.titulo}}</td>
                     <td>{{entrada.nombre}} {{entrada.apellidos}}</td>
                     <td>{{entrada.categoria}}</td>
                     <td>
+                        <!-- Recorro todas las etiquetas para mostrarlas -->
                         <span *ngFor="let etiqueta of entrada.etiquetas">{{etiqueta}}, </span>
                     </td>
                     <td>{{entrada.estado}}</td>
                     <td>
+                      <!-- Botones de acción -->
                         <span [routerLink]="['/editar-entrada/', entrada.id]" title="Editar entrada">
                           <fa-icon class="btn-acciones text-success" [icon]="faEdit"></fa-icon>
                         </span>
@@ -60,7 +65,7 @@
               </table>
             </ng-template>
           </li>
-          <li [ngbNavItem]="2">
+          <li [ngbNavItem]="2"> <!-- Pestaña de la papelera -->
             <a ngbNavLink>Papelera</a>
             <ng-template ngbNavContent>
               <!-- Tabla con la lista de entradas -->
@@ -78,6 +83,7 @@
                 </thead>
                 <tbody>
                   <ng-container *ngFor="let entrada of entradas">
+                    <!-- Solo muestro aquellas que están en la papelera. Para el editor solo las suyas propias -->
                     <tr *ngIf="entrada.estado == 'Papelera' && (identidad.perfil == 'Administrador' || entrada.usuario_id == identidad.id)">
                     <th scope="row">{{entrada.id}}</th>
                     <td>{{entrada.titulo}}</td>
@@ -115,8 +121,6 @@
           </li>
         </ul>
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
-
-
     </div> 
 </div>
 <!-- FIN Contenedor -->

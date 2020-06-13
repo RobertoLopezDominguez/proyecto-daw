@@ -1,12 +1,15 @@
+/**
+ * Servicio para las operaciones con usuarios
+ */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Usuario } from '../modelos/usuario';
 import { global } from './global';
 
 //Clase del servicio para Usuario
 @Injectable()
 export class UsuarioService{
+
     public url: string;
     public identidad;
     public token;
@@ -154,25 +157,31 @@ export class UsuarioService{
     getUsuarios(token): Observable<any>{
         //Cabeceras HTTP. Envío además el token.
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-        .set('Authorization', token);
+                                        .set('Authorization', token);
 
         //Devuelvo la petición AJAX para obtener todos los usuarios
         return this._http.get(this.url+'usuarios', {headers: headers});
     }
 
+    /**
+     * Método que recupera un usuario por su ID
+     */
     getUsuarioById(token,id):Observable<any>{
         //Cabeceras HTTP. Envío además el token.
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-        .set('Authorization', token);
+                                        .set('Authorization', token);
 
-        //Devuelvo la petición AJAX para obtener todos los usuarios
+        //Devuelvo la petición AJAX para obtener el usuario
         return this._http.get(this.url+'usuario/' + id, {headers: headers});
     }
 
+    /**
+     * Método que elimina un usuario por ID
+     */
     eliminar(token, id): Observable<any>{
         //Cabeceras HTTP. Envío además el token.
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-        .set('Authorization', token);
+                                        .set('Authorization', token);
 
         //Devuelvo la petición AJAX para eliminar el usuario
         return this._http.delete(this.url+'usuario/' + id, {headers: headers});

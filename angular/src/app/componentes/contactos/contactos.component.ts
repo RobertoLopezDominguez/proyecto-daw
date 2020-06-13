@@ -1,8 +1,10 @@
+/**
+ * Componente para la gestión de los formularios de contacto en el back-end
+ */
 import { Component, OnInit } from '@angular/core';
 import { ContactoService } from '../../servicios/contacto.service';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
-import { Contacto } from '../../modelos/contacto';
 
 @Component({
   selector: 'app-contactos',
@@ -30,17 +32,19 @@ export class ContactosComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    //Recupero todos los contactos al iniciar el componente
     this.getContactos();
   }
 
+  /**
+   * Método que recupera los contactos
+   */
   getContactos(){
+    //Utilizo el servicios para recuperar los contactos
     this._contactoService.getContactos(this.token).subscribe(
       response => {
-        
         if(response.estado == 'éxito'){
           this.contactos = response.contactos;
-          console.log(this.contactos);
-
         }
       },
       error => {
@@ -49,10 +53,15 @@ export class ContactosComponent implements OnInit {
     );
   }
 
+  /**
+   * Método que elimina un formulario de contacto por ID
+   */
   eliminar(id){
+    //Paso el id al método correspondiente del servicio para que lo elimine
     this._contactoService.eliminar(this.token,id).subscribe(
       response => {
         if(response.estado == 'éxito'){
+          //Actualizo la lista de contactos
           this.getContactos();
         }
       },

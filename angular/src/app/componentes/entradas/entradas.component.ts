@@ -1,12 +1,13 @@
+/**
+ * Componente para gestionar las entradas
+ */
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { EntradaService } from '../../servicios/entrada.service';
 import { CategoriaService } from '../../servicios/categoria.service';
 import { faEdit, faTrashAlt, faTimesCircle, faPlayCircle, faTrashRestoreAlt, faExclamationTriangle } from '@fortawesome/free-solid-svg-icons';
-import { Entrada } from '../../modelos/entrada';
-import { global } from '../../servicios/global';
-import { NgbNav} from '@ng-bootstrap/ng-bootstrap';
+import { NgbNav} from '@ng-bootstrap/ng-bootstrap'; //Para las pestañas
 
 @Component({
   selector: 'app-entradas',
@@ -20,7 +21,7 @@ export class EntradasComponent implements OnInit {
   public identidad;
   public token;
   public entradas;
-  active = 1;
+  public active = 1; //Indica qué pestaña está activa
 
   //Iconos
   public faEdit = faEdit;
@@ -37,27 +38,23 @@ export class EntradasComponent implements OnInit {
     private _entradaService: EntradaService,
     private _categoriaService: CategoriaService
   ) {
-    
-   }
-
-  ngOnInit(): void {
-
     this.page_title = 'Entradas';
+    //Cargo los datos del usuario autenticado
     this.identidad = this._usuarioService.getIdentidad();
     this.token = this._usuarioService.getToken();
+  }
 
+  ngOnInit(): void {
     //Cargo todas las entradas
     this.getEntradas();
   }
 
+  //Método que recupera todas las entradas
   getEntradas(){
     this._entradaService.getEntradas().subscribe(
       response => {
-        
         if(response.estado == 'éxito'){
           this.entradas = response.entradas;
-          console.log(this.entradas);
-
         }
       },
       error => {
@@ -66,6 +63,7 @@ export class EntradasComponent implements OnInit {
     );
   }
 
+  //Métooo que cambia el estado de una entrada (Publicada, Borrador, Papelera)
   cambiaEstado(entrada, estado){
     //Asigno el nuevo estado a la entrada
     entrada.estado = estado;
@@ -76,13 +74,11 @@ export class EntradasComponent implements OnInit {
     //Actualizo al entrada
     this._entradaService.editar(this.token, entradaAux, entrada.id).subscribe(
       response => {
-        console.log(response);
             //Actualizo las categorías almacenadas
             this._categoriaService.getCategoriasNoVacias().subscribe(
               response => {
                 if(response.estado == 'éxito'){
                     let categorias = response.categorias; 
-                    console.log(response.categorias);
                     //Almaceno las categorías en el localstorage
                     this._categoriaService.almacenarCategorias(categorias);
                 }
@@ -96,14 +92,13 @@ export class EntradasComponent implements OnInit {
         console.log(error);
       }
     );
-
-
   }
 
+  //Método que elimina una entrada
   eliminarDefinitivamente(id){
     this._entradaService.eliminar(this.token, id).subscribe(
       response => {
-        console.log(response);
+        //Actualizo las entradas después de borrar
         this.getEntradas();
       },
       error => {

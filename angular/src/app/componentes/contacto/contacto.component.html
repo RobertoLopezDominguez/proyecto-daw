@@ -28,7 +28,7 @@
             </div>
             <div class="form-group"> 
                 <label for="direccion">Dirección</label>
-                <input type="text" name="direccion" class="form-control" #direccion="ngModel" [(ngModel)]="contacto.direccion" pattern="[A-Za-zÁ-ÿ ]+">
+                <input type="text" name="direccion" class="form-control" #direccion="ngModel" [(ngModel)]="contacto.direccion">
                 <small *ngIf="!direccion.valid && direccion.touched" class="invalid-feedback d-block">
                     Dirección no válida
                 </small>

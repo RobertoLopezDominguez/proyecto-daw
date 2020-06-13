@@ -1,3 +1,6 @@
+/**
+ * Componente que se encarga de registrar un usuario nuevo
+ */
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from '../../modelos/Usuario'; //Importo mi modelo de usuario para el registro
 import { UsuarioService } from '../../servicios/usuario.service'; //Importo el servicio para Usuario
@@ -15,6 +18,7 @@ export class RegistroComponent implements OnInit {
   public usuario: Usuario; //Donde almacenar el usuario para el registro
   public estado: string; //Estado del registro del usuario
 
+  //Inyecto el servicio en el constructor
   constructor( 
     private _usuarioService: UsuarioService
    ) { 

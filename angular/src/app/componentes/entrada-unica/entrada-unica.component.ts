@@ -1,3 +1,6 @@
+/**
+ * Componente para mostrar el detalle de una entrada
+ */
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { EntradaService } from '../../servicios/entrada.service';
@@ -19,6 +22,8 @@ export class EntradaUnicaComponent implements OnInit {
   public entrada;
   public imagen;
   public url;
+
+  //Iconos
   public faUserAlt = faUserAlt;
   public faTags = faTags;
 
@@ -36,12 +41,13 @@ export class EntradaUnicaComponent implements OnInit {
     this.imagen = new Medio(1, '', '', '', 'Publicada', '', '', '', '',null);
    }
 
+  //Al iniciar el componente
   ngOnInit(): void {
+    //Recupero la entrada
     this.getEntrada();
-    console.log(this.imagen);
-    console.log(this.entrada);
   }
 
+  //Método que recupera la entrada en cuestión
   getEntrada(){
     //Recupero el Id de la entrada de la URL
     this._route.params.subscribe(
@@ -55,9 +61,10 @@ export class EntradaUnicaComponent implements OnInit {
               this.entrada = response.entrada;
               //Compruebo que la entrada está publicada
               if(this.entrada.estado != 'Publicada'){
+                //Si no está publicada redirijo a Inicio
                 this._router.navigate(['/inicio']);
               }
-              console.log(this.entrada);
+              //Recupero la imagen de esta entrada
               this.getImagen(this.entrada.imagen_id);
             }
           },
@@ -70,19 +77,17 @@ export class EntradaUnicaComponent implements OnInit {
       });
   }
 
+  //Método que recupera la entrada de la imagen
   getImagen(id){
-
     //Recupero el medio asociado a la entrada
     this._medioService.getMedioById(id).subscribe(
       response => {
           if(response.estado == 'éxito'){
             this.imagen = response.medio;
-            console.log(this.imagen);
           }
         },
         error => {
           console.log(error);
-
         }
     );
   }

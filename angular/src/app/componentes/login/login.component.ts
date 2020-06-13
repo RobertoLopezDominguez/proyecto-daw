@@ -1,3 +1,6 @@
+/**
+ * Componente para la pantalla de login
+ */
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from 'src/app/modelos/Usuario';
 import { UsuarioService } from 'src/app/servicios/usuario.service';
@@ -64,13 +67,11 @@ export class LoginComponent implements OnInit {
           //Para ello esta vez incluyo un segundo parámetro true
           this._usuarioService.signup(this.usuario, true).subscribe(
             response => {
-              console.log('Usuario: ' + this.usuario);
               this.identidad = response; //Almaceno los datos del usuario autenticado
 
               //Almaceno en localStorage los datos obtenidos para hacerlos persistentes
               localStorage.setItem('token', this.token);
               localStorage.setItem('identidad', JSON.stringify(this.identidad));
-              console.log('localStorage Identidad: ' + localStorage.getItem('identidad'));
 
               //Redirección a la página principal
               this._router.navigate(['inicio']);
@@ -96,9 +97,11 @@ export class LoginComponent implements OnInit {
    * Método para cerrar sesión
    */
   logout(){
+    //Recupero de la URL el parámetro 'cerrar'
     this._route.params.subscribe(params => {
       let logout = +params['cerrar'];
 
+      //Si el parámetro está elimino la identidad y el token
       if(logout == 1){
         localStorage.removeItem('identidad');
         localStorage.removeItem('token');

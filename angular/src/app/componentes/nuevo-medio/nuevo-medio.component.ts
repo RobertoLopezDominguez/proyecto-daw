@@ -1,3 +1,6 @@
+/**
+ * Componente para añadir un nuevo medio a la biblioteca
+ */
 import { Component, OnInit } from '@angular/core';
 import { Medio } from '../../modelos/medio';
 import { UsuarioService } from '../../servicios/usuario.service';
@@ -70,16 +73,20 @@ export class NuevoMedioComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  //Medoto para subir una imagen
+  //Recoge la respuesta de Angular-file-uploader según la configuración afuConfig
   subirImagen(datos){
+    //Recupero la respuesta
     let respuesta = JSON.parse(datos.response);
+    //Asigno al medio el medio de la respuesta
     this.medio = respuesta.medio;
-    console.log(this.medio);
   }
 
+  //Método que se ejecuta al enviar el formulario
   onSubmit(form){
+    //Actualizo el medio en la base de datos
     this._medioService.actualizar(this.token, this.medio).subscribe(
       response => {
-        console.log(response);
         if(response['estado'] == 'éxito'){
           this.estado = 'éxito';
         }else{

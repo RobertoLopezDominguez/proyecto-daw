@@ -1,3 +1,6 @@
+/**
+ * Componente para editar el perfi de un usuario
+ */
 import { Component, OnInit } from '@angular/core';
 import { Usuario } from 'src/app/modelos/Usuario';
 import { UsuarioService } from '../../servicios/usuario.service'; //Importo el servicio para Usuario
@@ -18,6 +21,7 @@ export class PerfilUsuarioComponent implements OnInit {
   public estado: string; 
   public url;
 
+  //Configuración para la subida de ficheros de Angular-file-uploader
   public afuConfig = {
       multiple: false,
       formatsAllowed: ".jpg, .png, jpeg, .gif",
@@ -84,7 +88,9 @@ export class PerfilUsuarioComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  //Método que se ejecuta al enviar el formulario
   onSubmit(form){
+    //Actualizo los datos del usuario
     this._usuarioService.actualizar(this.token, this.usuario).subscribe(
       response => {
         console.log(response);
@@ -105,8 +111,12 @@ export class PerfilUsuarioComponent implements OnInit {
     );
   }
 
+  //Medoto para subir una imagen
+  //Recoge la respuesta de Angular-file-uploader según la configuración afuConfig
   subirImagen(datos){
+    //Recupero la respuesta
     let respuesta = JSON.parse(datos.response);
+    //Asigno al medio el medio de la respuesta
     this.usuario.imagen = respuesta.imagen;
   }
 

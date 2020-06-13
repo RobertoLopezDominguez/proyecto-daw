@@ -1,3 +1,6 @@
+/**
+ * Método para las operaciones con los perfiles
+ */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -16,6 +19,9 @@ export class PerfilService{
         this.url = global.url;
     }
 
+    /**
+     * Método que recupera todos los perfiles
+     */
     getPerfiles():Observable<any>{
         //Cabeceras HTTP
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -24,6 +30,9 @@ export class PerfilService{
         return this._http.get(this.url+'perfiles', {headers: headers});
     }
 
+    /**
+     * Método que recupera un perfil por ID
+     */
     getPerfil(token, id):Observable<any>{
         //Cabeceras HTTP. Envío además el token.
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')

@@ -3,25 +3,24 @@
     <div  class="col-md-12">
         <!-- Título de la página -->
         <h1>{{ page_title }}</h1>
-
+          <!-- Utilizo ngbNav para las pestañas de Bootstrap en Angular-->
           <ul ngbNav #nav="ngbNav" [(activeId)]="active" class="nav-tabs">
             <li [ngbNavItem]="1">
               <a ngbNavLink>Biblioteca</a>
               <ng-template ngbNavContent>
+                <!-- Incluye el componente biblioteca-medios -->
                 <app-biblioteca-medios></app-biblioteca-medios>
               </ng-template>
             </li>
             <li [ngbNavItem]="2">
               <a ngbNavLink>Nuevo</a>
               <ng-template ngbNavContent>
+                <!-- Incluye el compoente nuevo-medio -->
                 <app-nuevo-medio></app-nuevo-medio>
               </ng-template>
             </li>
           </ul>
           
-          <div [ngbNavOutlet]="nav" class="mt-2"></div>
-          
-         
-
+          <div [ngbNavOutlet]="nav" class="mt-2"></div> 
     </div>
 </div>

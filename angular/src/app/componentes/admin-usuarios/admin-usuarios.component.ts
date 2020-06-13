@@ -1,3 +1,6 @@
+/**
+ * Componente para la gestión de usuarios
+ */
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from '../../servicios/usuario.service';
 import { faEdit, faTrashAlt, faTimesCircle, faPlayCircle, } from '@fortawesome/free-solid-svg-icons';
@@ -11,9 +14,10 @@ import { faEdit, faTrashAlt, faTimesCircle, faPlayCircle, } from '@fortawesome/f
 export class AdminUsuariosComponent implements OnInit {
 
   public page_title: string;
-  public usuarios;
+  public usuarios; //Objeto donde se guardarán los usuarios
   public identidad;
   public token;
+  public estado;
 
   //Iconos
   public faTrashAlt = faTrashAlt;
@@ -21,36 +25,46 @@ export class AdminUsuariosComponent implements OnInit {
   public faTimesCircle = faTimesCircle;
   public faPlayCircle = faPlayCircle;
 
+  //En el contructor inyecto los servicios que voy a usar
   constructor(
     private _usuarioService: UsuarioService
   ) { 
+    //Título de la página
     this.page_title = 'Administración de usuarios';
 
-    //Recupero la identidad del usuario logueado
+    //Recupero la identidad y el token del usuario logueado
     this.identidad = this._usuarioService.getIdentidad();
     this.token = this._usuarioService.getToken();
   }
 
+  //Al iniciar el componente recupero los usuarios
   ngOnInit(): void {
     this.getUsuarios();
   }
 
+  /**
+   * Método que devuelve los usuarios
+   */
   getUsuarios(){
+    //Recupero los usuarios haciendo la petición al servicio
     this._usuarioService.getUsuarios(this.token).subscribe(
       response => {
-        
+        //Si la respuesta es correcta
         if(response.estado == 'éxito'){
+          //Asigno la respuesta al objeto usuarios
           this.usuarios = response.usuarios;
-          console.log(this.usuarios);
-
         }
       },
       error => {
-        console.log(error);
+        console.log(error); //Si hay un error lo muestro por consola
       }
     );
   }
 
+  /**
+   * Método que intercambia el estado de un usuario
+   * de 'Activo' a 'Desactivado' y viceversa
+   */
   cambiaEstado(usuario){
 
     //Asigno el nuevo estado al usuario
@@ -66,18 +80,25 @@ export class AdminUsuariosComponent implements OnInit {
     //Actualizo al entrada
     this._usuarioService.actualizar(this.token, usuarioAux).subscribe(
       response => {
-        
+        if(response.estado == 'éxito'){
+          this.estado = 'éxito';
+        }
       },
       error => {
+        this.estado = 'error';
         console.log(error);
       }
     );
   }
 
+  /**
+   * Método que elimina un usuario por ID
+   */
   eliminar(id){
+    //Elimino el usuario por medio del médodo correspondiente del servicio
     this._usuarioService.eliminar(this.token, id).subscribe(
       response => {
-        console.log(response);
+        //Una vez eliminado actualizo los usuarios
         this.getUsuarios();
       },
       error => {

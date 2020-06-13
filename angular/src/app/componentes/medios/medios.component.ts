@@ -1,5 +1,8 @@
+/**
+ * Componente para gestionar los medios
+ */
 import { Component, OnInit } from '@angular/core';
-import { NgbNav} from '@ng-bootstrap/ng-bootstrap';
+import { NgbNav} from '@ng-bootstrap/ng-bootstrap'; //Para las pestañas
 
 @Component({
   selector: 'app-medios',
@@ -11,7 +14,7 @@ export class MediosComponent implements OnInit {
 
   public page_title: string;
   public pestana: string;
-  active = 1;
+  active = 1; //Pestaña activa
 
   constructor() { 
     this.page_title = 'Medios';

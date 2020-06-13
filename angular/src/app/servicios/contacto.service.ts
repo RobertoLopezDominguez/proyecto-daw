@@ -1,3 +1,6 @@
+/**
+ * Servicio para las opraciones con los formularios de contacto
+ */
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -15,6 +18,11 @@ export class ContactoService{
         this.url = global.url;
     }
 
+    /**
+     * Método que crea un nuevo contacto
+     * Recibe el objeto con el contacto a crear
+     * Devuelve un Observable con la respuesta JSON del servidor
+     */
     nuevo(contacto):Observable<any>{
         //Creo la cadena para enviar en la petición
         let  json = JSON.stringify(contacto);
@@ -27,8 +35,13 @@ export class ContactoService{
         return this._http.post(this.url+'contacto', parametros, {headers: headers});
     }
 
+    /**
+     * Método para obtener todos los contactos
+     * Recibe el token del usuario autenticado
+     * Devuelve un Observable con la respuesta JSON del servidor
+     */
     getContactos(token):Observable<any>{
-        //Cabeceras HTTP
+        //Cabeceras HTTP. Incluye el token del usuario autenticado
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
                                         .set('Authorization', token);
 
@@ -36,8 +49,13 @@ export class ContactoService{
         return this._http.get(this.url+'contactos', {headers: headers}); 
     }
 
+    /**
+     * Método para eliminar un contacto por ID
+     * Recibe el token del usuario autenticado y la ID
+     * Devuelve un Observable con la respuesta JSON del servidor
+     */   
     eliminar(token, id):Observable<any>{
-        //Cabeceras HTTP
+        //Cabeceras HTTP. Incluye el token del usuario autenticado
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
                                         .set('Authorization', token);
 

@@ -1,3 +1,6 @@
+/**
+ * Componente para crear una nueva entrada
+ */
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { UsuarioService } from '../../servicios/usuario.service';
@@ -7,7 +10,6 @@ import { MedioService } from '../../servicios/medio.service';
 import { Entrada } from '../../modelos/entrada';
 import { global } from '../../servicios/global';
 import { faMinusCircle } from '@fortawesome/free-solid-svg-icons';
-import { ThrowStmt } from '@angular/compiler';
 import { Medio } from 'src/app/modelos/medio';
  
 
@@ -48,11 +50,15 @@ export class NuevaEntradaComponent implements OnInit, DoCheck {
     private _medioService: MedioService
   ) {
     this.page_title = 'Nueva entrada';
+
+    //Recupero la identidad y el token de usuario autenticado
     this.identidad = this._usuarioService.getIdentidad();
     this.token = this._usuarioService.getToken();
+
     //URL del API
     this.url = global.url;
 
+    //Para el estado del botón que muestra la biblioteca de medios
     this.mediosVisible = false;
    }
 
@@ -71,6 +77,7 @@ export class NuevaEntradaComponent implements OnInit, DoCheck {
   }
 
   ngDoCheck(){
+    //Compruebo periódicamente el estado de la imagen
     this.compruebaImagen();
   }
 
@@ -92,16 +99,14 @@ export class NuevaEntradaComponent implements OnInit, DoCheck {
     );
   }
 
+  //Método al enviar el formulario
   onSubmit(form){
-    console.log(this.entrada);
-
     //Guardo el post en la base de datos
     this._entradaService.crear(this.token, this.entrada).subscribe(
       response => {
         if(response.estado = 'éxito'){
           this.entrada = response.entrada;
           this.estado = 'éxito';
-          console.log(this.entrada);
         }else{
           this.estado = 'error';
         }
@@ -139,18 +144,22 @@ export class NuevaEntradaComponent implements OnInit, DoCheck {
     this.etiquetas.splice(indice,1);
   }
 
+  //Método que cambia el estado del botón de la biblioteca de medios
   toggleMedios(){
     this.mediosVisible = !this.mediosVisible;
-    console.log(this.mediosVisible);
   }
 
+  //Método que comprueba si hay una imagen seleccionada
   compruebaImagen(){
-      this.entrada.imagen_id = this._medioService.getMedioSeleccionado()['id'];
-      if(this.entrada.imagen_id != null){
-        this.medio.nombre = this._medioService.getMedioSeleccionado()['nombre'];
-      }
+    //Recupero la imagen seleccionada
+    this.entrada.imagen_id = this._medioService.getMedioSeleccionado()['id'];
+    //Si esta existe recupero el nombre para mostrar la imagen
+    if(this.entrada.imagen_id != null){
+      this.medio.nombre = this._medioService.getMedioSeleccionado()['nombre'];
+    }
   }
 
+  //Elimina la imagen seleccionada
   eliminaImagen(){
     this.entrada.imagen_id = null;
     this._medioService.clearImagen();

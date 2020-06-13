@@ -1,3 +1,6 @@
+/**
+ * Guard para autorizar el acceso solo al perfil Administrador
+ */
 import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { UsuarioService } from './usuario.service';
@@ -16,7 +19,7 @@ export class AdminGuard implements CanActivate{
         let identidad = this._usuarioService.getIdentidad();
 
         //Si 'identidad' existe es que el usuario está logueado
-        if(identidad.nivel_acceso == 1){
+        if(identidad.nivel_acceso == 1){ // 1 corresponde al perfil Administrador
             return true;
         }else{//si la respuesta es negativa
             //Redirijo a la página de inicio

@@ -1,15 +1,15 @@
+/**
+ * Componente que muestra la pantalla de inicio con las entradas publicadas
+ */
 import { Component, OnInit } from '@angular/core';
 import { EntradaService } from '../../servicios/entrada.service';
-import { MedioService } from '../../servicios/medio.service';
-import { Entrada } from '../../modelos/entrada';
-import { Medio } from 'src/app/modelos/medio';
 import { global } from '../../servicios/global';
 
 @Component({
   selector: 'app-inicio',
   templateUrl: './inicio.component.html',
   styleUrls: ['./inicio.component.css'],
-  providers: [EntradaService, MedioService]
+  providers: [EntradaService]
 })
 export class InicioComponent implements OnInit {
 
@@ -18,8 +18,7 @@ export class InicioComponent implements OnInit {
   public url;
 
   constructor(
-    private _entradaService: EntradaService,
-    private _medioService: MedioService
+    private _entradaService: EntradaService
   ) {
     this.page_title = 'Inicio';
     //URL para peticiones AJAX a Laravel
@@ -27,19 +26,17 @@ export class InicioComponent implements OnInit {
    }
 
   ngOnInit(): void {
+    //Cargo las entradas al iniciar el componente
     this.getEntradas();
-    console.log(this.entradas);
   }
 
+  //Método que recupera todas las entradas publicadas
   getEntradas(){
-    //Petición AJAX para recuperar las entradas publicadas
+    //Petición para recuperar las entradas publicadas
     this._entradaService.getEntradasPublicadas().subscribe(
       response => {
         if(response.estado == 'éxito'){
           this.entradas = response.entradas;
-
-          console.log(this.entradas);
-         // this.getImagen(this.entrada.imagen_id);
         }
       },
       error => { 

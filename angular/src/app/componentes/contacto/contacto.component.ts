@@ -1,3 +1,6 @@
+/**
+ * Componente para el formulario público de contacto
+ */
 import { Component, OnInit } from '@angular/core';
 import { Contacto } from 'src/app/modelos/contacto';
 import { ContactoService } from '../../servicios/contacto.service';
@@ -29,7 +32,7 @@ export class ContactoComponent implements OnInit {
   }
 
   onSubmit(form){
-    //Recupero la IP de cliente
+    //Recupero la IP de cliente usando un servicio externo
     this._http.get("http://api.ipify.org/?format=json").subscribe(
       (response:any) => {
         //Asigno la IP al objeto del contacto
@@ -41,6 +44,7 @@ export class ContactoComponent implements OnInit {
             if(response['estado'] == 'éxito'){
               this.estado = 'éxito';
             }
+            //Limpio el formulario
             form.reset();
           },
           error => {
